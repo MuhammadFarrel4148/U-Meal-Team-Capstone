@@ -17,7 +17,7 @@ const SignUp = (request, h) => {
 
     const id = nanoid(16)
     const InsertUser = {
-        id, username, email, phonenumber, password
+        username, email, phonenumber, password, id,
     }
 
     users.push(InsertUser)
@@ -29,7 +29,7 @@ const SignUp = (request, h) => {
             status: 'success',
             message: 'user berhasil ditambahkan',
             data: {
-                users : users.map(({ username, email, phonenumber }) => ({ username, email, phonenumber }))
+                users : users.map(({ id, username, email, phonenumber }) => ({ id, username, email, phonenumber }))
             }
         })
         response.code(201)
@@ -89,4 +89,24 @@ const ForgotPassword = (request, h) => {
     return response
 }
 
-module.exports = { SignUp, SignIn, ForgotPassword }
+const Logout = (request, h) => {
+    const {id} = request.params
+    const userIndex = users.findIndex ((u) => u.id === id)
+    if (userIndex !== -1){
+        users.splice(userIndex, 1)
+        const response = h.response({
+            status: 'Success',
+            message: 'Logout berhasil'
+        })
+        response.code(200)
+        return response
+    }
+    const response = h.response({
+        status: 'fail',
+        message: 'User tidak ditemukan'
+    })
+    response.code(404)
+    return response
+}
+
+module.exports = { SignUp, SignIn, ForgotPassword, Logout }

@@ -1,4 +1,4 @@
-const { SignUp, SignIn, ForgotPassword } = require('./handler')
+const { SignUp, SignIn, ForgotPassword, Logout } = require('./handler')
 
 const routes = [
     {
@@ -17,6 +17,11 @@ const routes = [
         method: 'POST',
         path: '/forgotpassword',
         handler: ForgotPassword
+    },
+    {
+        method: 'POST',
+        path: '/logout/{id}',
+        handler: Logout
     }
 ]
 
