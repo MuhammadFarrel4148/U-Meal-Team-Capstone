@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">UMeal</string>
+    <string name="hello_welcome">Halo, Selamat datang👋</string>
+    <string name="happy_to_have_you_back">Senang anda kembali</string>
+    <string name="email_address">Alamat email</string>
+    <string name="enter_your_email">Masukkan alamat email</string>
+    <string name="password">password</string>
+    <string name="enter_password">Masukkan Passsword</string>
+    <string name="login">Login</string>
+    <string name="dont_have_an_account">Belum Punya Akun? </string>
+    <string name="signup">Signup</string>
+    <string name="create_account">Buat akun👋</string>
+    <string name="lets_create_new_account">Ayo buat akun untuk masuk</string>
+    <string name="username">Username</string>
+    <string name="enter_username">Masukkan username</string>
+    <string name="already_have_account">Sudah punya akun?</string>
 </resources>
