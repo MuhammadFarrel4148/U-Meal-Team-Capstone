@@ -10,6 +10,7 @@ import com.example.umeal.MainActivity
 import com.example.umeal.R
 import com.example.umeal.auth.signup.ui.RegisterActivity
 import com.example.umeal.databinding.ActivityLoginBinding
+import com.example.umeal.home.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -26,6 +27,10 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnSignup.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
+        binding.btnLogin.setOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
         }
     }
 }

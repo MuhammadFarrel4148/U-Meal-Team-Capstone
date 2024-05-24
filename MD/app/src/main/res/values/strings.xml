@@ -14,4 +14,11 @@
     <string name="username">Username</string>
     <string name="enter_username">Masukkan username</string>
     <string name="already_have_account">Sudah punya akun?</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_scan">Scan</string>
+    <string name="title_history">History</string>
+    <string name="title_profile">Profile</string>
 </resources>

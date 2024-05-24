@@ -13,6 +13,10 @@
         android:theme="@style/Theme.UMeal"
         tools:targetApi="31">
         <activity
+            android:name=".home.HomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home" />
+        <activity
             android:name=".MainActivity"
             android:exported="false">
 
@@ -30,7 +34,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 
