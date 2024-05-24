@@ -1,5 +1,8 @@
 const users = [
 
 ]
+const foods = [
+    
+]
 
-module.exports = users
+module.exports = { users, foods }

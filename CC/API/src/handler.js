@@ -1,4 +1,4 @@
-const users = require('./database')
+const { users, foods } = require('./database')
 const { nanoid } = require('nanoid')
 
 const SignUp = (request, h) => {
@@ -108,5 +108,91 @@ const Logout = (request, h) => {
     response.code(404)
     return response
 }
+const CRUDFood = (request, h) => {
+    const { method } = request;
+    const { id } = request.params;
 
-module.exports = { SignUp, SignIn, ForgotPassword, Logout }
+    if (method === 'post') {
+        const { makanan, protein, karbohidrat, serat } = request.payload
+        const foodId = nanoid(16)
+        const newFood = { id: foodId, makanan, protein, karbohidrat, serat }
+        
+        foods.push(newFood)
+        
+        const response = h.response({
+            status: 'success',
+            message: 'Makanan berhasil ditambahkan',
+            data: newFood
+        })
+        response.code(201)
+        return response
+
+    } else if (method === 'get') {
+        if (id) {
+            const food = foods.find(f => f.id === id)
+            if (food) {
+                const response = h.response ({
+                    status: 'Success',
+                    message: 'Data makanan berhasil diambil',
+                    data: food
+                })
+                response.code(200)
+                return response
+            } else {
+                const response = h.response({
+                    status: 'fail',
+                    message: 'Makanan tidak ditemukan'
+                })
+                response.code(404)
+                return response
+            }
+        } else {
+            const response = h.response({
+                status: 'success',
+                message: 'Data semua makanan berhasil diambil',
+                data: foods
+            })
+            response.code(200)
+            return response
+        }
+    } else if (method === 'put') {
+        const { makanan, protein, karbohidrat, serat } = request.payload
+        const foodIndex = foods.findIndex(f => f.id === id)
+        if (foodIndex !== -1) {
+            foods[foodIndex] = {id , makanan, protein, karbohidrat, serat }
+            const response = h.response({
+                status: 'success',
+                message: 'Makanan berhasil diupdate',
+                data: foods[foodIndex]
+            })
+            response.code(200)
+            return response
+        }
+        const response = h.response({
+            status: 'fail',
+            message: 'Makanan tidak ditemukan'
+        })
+        response.code(404)
+        return response
+    } else if (method === 'delete'){
+        const foodIndex = foods.findIndex(f => f.id === id)
+        if (foodIndex !== -1){
+            foods.splice(foodIndex, 1)
+            const response = h.response({
+                status: 'success',
+                message: 'Makanan berhasil dihapus'
+            })
+            response.code(200)
+            return response
+        }
+        const response = h.response({
+            status: 'fail',
+            message: 'Makanan gagal ditemukan'
+        })
+        response.code(404)
+        return response
+    }
+}
+
+
+module.exports = { SignUp, SignIn, ForgotPassword, Logout, CRUDFood }

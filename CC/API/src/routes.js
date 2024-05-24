@@ -1,4 +1,4 @@
-const { SignUp, SignIn, ForgotPassword, Logout } = require('./handler')
+const { SignUp, SignIn, ForgotPassword, Logout, CRUDFood } = require('./handler')
 
 const routes = [
     {
@@ -22,7 +22,27 @@ const routes = [
         method: 'POST',
         path: '/logout/{id}',
         handler: Logout
-    }
+    },
+    {
+        method: 'POST',
+        path: '/kalori',
+        handler: CRUDFood
+    },
+    {
+        method: 'GET',
+        path: '/kalori',
+        handler: CRUDFood
+    },
+    {
+        method: 'GET',
+        path: '/kalori/{id}',
+        handler: CRUDFood
+    },
+    {
+        method: 'DELETE',
+        path: '/kalori/{id}',
+        handler: CRUDFood
+    },
 ]
 
 module.exports = routes
