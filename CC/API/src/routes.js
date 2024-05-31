@@ -1,4 +1,4 @@
-const { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, CRUDFood,  } = require('./handler')
+const { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, GetFoods, GetTotalKalori, UploadImage  } = require('./handler')
 
 const routes = [
     {
@@ -32,28 +32,30 @@ const routes = [
     },
 
     {
+        method: 'GET',
+        path: '/foods',
+        handler: (request, h) => AccessValidation(request, h) && GetFoods(request, h)
+    },
+
+    {
+        method: 'GET',
+        path: '/kalori',
+        handler: (request, h) => AccessValidation(request, h) && GetTotalKalori(request, h)
+    },
+    {
         method: 'POST',
-        path: '/kalori',
-        handler: (request, h) => AccessValidation(request, h) && CRUDFood(request, h)
-    },
-
-    {
-        method: 'GET',
-        path: '/kalori',
-        handler: (request, h) => AccessValidation(request, h) && CRUDFood(request, h)
-    },
-
-    {
-        method: 'GET',
-        path: '/kalori/{id}',
-        handler: (request, h) => AccessValidation(request, h) && CRUDFood(request, h)
-    },
-
-    {
-        method: 'DELETE',
-        path: '/kalori/{id}',
-        handler: (request, h) => AccessValidation(request, h) && CRUDFood(request, h)
-    },
+        path: '/upload',
+        options: {
+            payload: {
+                output: 'stream',
+                allow: 'multipart/form-data',
+                maxBytes: 10485760, // 10 MB
+                parse: true,
+                multipart: true
+            },
+            handler: (request, h) => AccessValidation(request, h) && UploadImage(request, h)
+        }
+    }
 ]
 
 module.exports = routes
