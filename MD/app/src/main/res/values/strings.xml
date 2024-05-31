@@ -21,4 +21,8 @@
     <string name="title_scan">Scan</string>
     <string name="title_history">History</string>
     <string name="title_profile">Profile</string>
+    <string name="prompt_password">Password</string>
+    <string name="invalid_password">Password harus >8 characters</string>
+    <string name="prompt_email">Email</string>
+    <string name="error_email">Format email salah</string>
 </resources>
