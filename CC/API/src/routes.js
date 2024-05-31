@@ -1,4 +1,4 @@
-const { SignUp, SignIn, ForgotPassword, Logout, CRUDFood } = require('./handler')
+const { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, CRUDFood,  } = require('./handler')
 
 const routes = [
     {
@@ -16,32 +16,43 @@ const routes = [
     {
         method: 'POST',
         path: '/forgotpassword',
-        handler: ForgotPassword
+        handler: ForgotPasswordSendEmail
     },
+
     {
         method: 'POST',
-        path: '/logout/{id}',
+        path: '/changepassword',
+        handler: ForgotPasswordChangePassword
+    },
+
+    {
+        method: 'POST',
+        path: '/logout',
         handler: Logout
     },
+
     {
         method: 'POST',
         path: '/kalori',
-        handler: CRUDFood
+        handler: (request, h) => AccessValidation(request, h) && CRUDFood(request, h)
     },
+
     {
         method: 'GET',
         path: '/kalori',
-        handler: CRUDFood
+        handler: (request, h) => AccessValidation(request, h) && CRUDFood(request, h)
     },
+
     {
         method: 'GET',
         path: '/kalori/{id}',
-        handler: CRUDFood
+        handler: (request, h) => AccessValidation(request, h) && CRUDFood(request, h)
     },
+
     {
         method: 'DELETE',
         path: '/kalori/{id}',
-        handler: CRUDFood
+        handler: (request, h) => AccessValidation(request, h) && CRUDFood(request, h)
     },
 ]
 

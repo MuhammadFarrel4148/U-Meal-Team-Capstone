@@ -1,8 +1,17 @@
 const users = [
 
 ]
+
 const foods = [
-    
+
 ]
 
-module.exports = { users, foods }
+let otp = [
+
+]
+
+const blacklistedToken = [
+
+]
+
+module.exports = { users, foods, otp, blacklistedToken }

@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const Hapi = require('@hapi/hapi')
 const routes = require('./routes')
 
@@ -12,4 +14,4 @@ const init = async() => {
     console.log(`Berjalan di ${server.info.uri}`)
 }
 
-init();
+init()

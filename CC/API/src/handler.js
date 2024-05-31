@@ -1,5 +1,46 @@
-const { users, foods } = require('./database')
+const { users, foods, otp, blacklistedToken } = require('./database')
 const { nanoid } = require('nanoid')
+const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+const JWT_SECRET = process.env.JWT_SECRET
+
+const GenerateToken = (user) => {
+    const token = jwt.sign({id: user.id, email: user.email}, JWT_SECRET, {expiresIn: '1h'})
+    return token
+}
+
+const AccessValidation = (request, h) => {
+    const authorization = request.headers.authorization
+    
+    if(!authorization) {
+        const response = h.response({
+            status: 'fail',
+            message: 'Token tidak ditemukan'
+        })
+        response.code(401)
+        return response
+    }
+
+    const token = authorization.split(' ')[1]
+
+    try {
+        const jwtDecode = jwt.verify(token, JWT_SECRET)
+        return jwtDecode
+
+    } catch(error) {
+        const response = h.response({
+            status: 'fail',
+            message: 'Unauthorized'
+        })
+        response.code(401)
+        return response
+    }
+}
+
+const blacklistToken = (token) => {
+    // Tambahkan token ke daftar token yang diblacklist
+    blacklistedToken.push(token);
+};
 
 const SignUp = (request, h) => {
     const { username, email, phonenumber, password } = request.payload
@@ -48,34 +89,15 @@ const SignUp = (request, h) => {
 const SignIn = (request, h) => {
     const { email, password } = request.payload
     const user = users.find(u => u.email === email && u.password === password)
-
+    
     //Check user 
     if(user !== undefined) {
-        const response = h.reponse({
-            status: 'success',
-            message: 'Berhasil login ke user'
-        })
-        response.code(200)
-        return response
-    }
-
-    const response = h.response({
-        status: 'fail',
-        message: 'Invalid email or password'
-    })
-    response.code(404)
-    return response
-}
-
-const ForgotPassword = (request, h) => {
-    const { email } = request.payload
-    const CheckEmail = users.filter((c) => c.email === email)[0]
-
-    //Check Email
-    if(CheckEmail !== undefined) {
+        const token = GenerateToken(user)
+    
         const response = h.response({
             status: 'success',
-            message: 'Check your email to reset the password'
+            message: 'Berhasil login ke user',
+            token: token
         })
         response.code(200)
         return response
@@ -83,36 +105,143 @@ const ForgotPassword = (request, h) => {
     
     const response = h.response({
         status: 'fail',
-        message: 'Email tidak ditemukan'
+        message: 'Invalid email or password'
     })
     response.code(404)
+    return response   
+}
+
+const ForgotPasswordSendEmail = async(request, h) => {
+    const { email } = request.payload
+    const CheckEmail = users.filter((c) => c.email === email)[0]
+
+    //Check Email
+    if (CheckEmail !== undefined) {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        const codeOtp = nanoid(8);
+        otp.push({ email, codeOtp })
+
+    
+        await transporter.sendMail({
+            from: 'U-Meal Application',
+            to: email,
+            subject: 'Kode OTP Verification',
+            text: `This is your OTP code ${codeOtp}`
+        });
+
+        const response = h.response({
+            status: 'success',
+            message: 'Check your email to reset the password'
+        });
+        response.code(200)
+        return response
+    }
+
+    const response = h.response({
+        status: 'fail',
+        message: 'Email tidak ditemukan'
+    });
+    response.code(404)
+    return response
+}
+
+const ForgotPasswordChangePassword = (request, h) => {
+    const { codeOtp, newPassword } = request.payload
+    const verifyOTP = otp.find(verify => verify.codeOtp === codeOtp)
+    
+    if (verifyOTP) {
+        const user = users.find((u) => u.email === verifyOTP.email)
+
+        if (user) {
+            user.password = newPassword;
+
+            // Remove the used OTP
+            otp.splice(otp.indexOf(verifyOTP), 1)
+
+            const response = h.response({
+                status: 'success',
+                message: 'Password has been reset successfully'
+            })
+            response.code(200)
+            return response
+        }
+
+        const response = h.response({
+            status: 'fail',
+            message: 'User not found'
+        })
+        response.code(404)
+        return response
+    }
+
+    const response = h.response({
+        status: 'fail',
+        message: 'Invalid OTP'
+    });
+    response.code(400)
     return response
 }
 
 const Logout = (request, h) => {
-    const {id} = request.params
-    const userIndex = users.findIndex ((u) => u.id === id)
-    if (userIndex !== -1){
-        users.splice(userIndex, 1)
+    const { authorization } = request.headers
+
+    if (!authorization && CheckToken === undefined) {
         const response = h.response({
-            status: 'Success',
+            status: 'fail',
+            message: 'Unauthorized'
+        })
+        response.code(401)
+        return response
+    }
+
+    const token = authorization.split(' ')[1];
+    const CheckToken = blacklistedToken.find(b => b === token)
+
+    if (CheckToken !== undefined) {
+        const response = h.response({
+            status: 'fail',
+            message: 'Unauthorized'
+        });
+        response.code(401)
+        return response
+    }
+
+    try {
+        const decodedToken = jwt.verify(token, JWT_SECRET)
+
+        // Panggil fungsi blacklistToken dengan meneruskan token yang didecode
+        blacklistToken(decodedToken)
+
+        const response = h.response({
+            status: 'success',
             message: 'Logout berhasil'
         })
         response.code(200)
         return response
+    } catch (error) {
+        const response = h.response({
+            status: 'fail',
+            message: 'Unauthorized'
+        })
+        response.code(401);
+        return response;
     }
-    const response = h.response({
-        status: 'fail',
-        message: 'User tidak ditemukan'
-    })
-    response.code(404)
-    return response
 }
+
 const CRUDFood = (request, h) => {
     const { method } = request;
     const { id } = request.params;
 
-    if (method === 'post') {
+    AccessValidation(request, h)
+
+    if (method === 'POST') {
         const { makanan, protein, karbohidrat, serat } = request.payload
         const foodId = nanoid(16)
         const newFood = { id: foodId, makanan, protein, karbohidrat, serat }
@@ -127,7 +256,7 @@ const CRUDFood = (request, h) => {
         response.code(201)
         return response
 
-    } else if (method === 'get') {
+    } else if (method === 'GET') {
         if (id) {
             const food = foods.find(f => f.id === id)
             if (food) {
@@ -155,7 +284,8 @@ const CRUDFood = (request, h) => {
             response.code(200)
             return response
         }
-    } else if (method === 'put') {
+
+    } else if (method === 'PUT') {
         const { makanan, protein, karbohidrat, serat } = request.payload
         const foodIndex = foods.findIndex(f => f.id === id)
         if (foodIndex !== -1) {
@@ -174,7 +304,8 @@ const CRUDFood = (request, h) => {
         })
         response.code(404)
         return response
-    } else if (method === 'delete'){
+
+    } else if (method === 'DELETE'){
         const foodIndex = foods.findIndex(f => f.id === id)
         if (foodIndex !== -1){
             foods.splice(foodIndex, 1)
@@ -195,4 +326,4 @@ const CRUDFood = (request, h) => {
 }
 
 
-module.exports = { SignUp, SignIn, ForgotPassword, Logout, CRUDFood }
+module.exports = { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, CRUDFood }
