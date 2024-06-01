@@ -1,13 +1,13 @@
-package com.example.umeal.home.ui.notifications
+package com.example.umeal.home.ui.history
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class NotificationsViewModel : ViewModel() {
+class HistoryViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+        value = "This is History Fragment"
     }
     val text: LiveData<String> = _text
 }
