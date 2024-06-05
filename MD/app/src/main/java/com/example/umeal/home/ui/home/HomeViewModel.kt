@@ -3,9 +3,10 @@ package com.example.umeal.home.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.umeal.ResultState
+import com.example.umeal.data.ResultState
+import com.example.umeal.data.repository.ArticleRepository
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val repository: ArticleRepository) : ViewModel() {
 
     private val _calories = MutableLiveData<Int>().apply {
         value = 1800
@@ -30,4 +31,6 @@ class HomeViewModel : ViewModel() {
         }
         _dailyCalorieResult.postValue(ResultState.Success(newCalories))
     }
+
+    fun getArticles() = repository.getArticles()
 }

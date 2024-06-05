@@ -46,9 +46,10 @@
     <string name="moms_name">Mommy %s</string>
     <string name="fulfilled_daily_calories">Kalori harian terpenuhi</string>
     <string name="trimester">Trimester %s</string>
-    <string name="calories_count">720/2400</string>
-    <string name="popular_article">Arikel populer</string>
+    <string name="calories_count">%s/%s</string>
+    <string name="popular_article">Artikel populer</string>
     <string name="article_title">10 Rekomendasi Makanan Sehat untuk Ibu Hamil</string>
     <string name="article_desc">Makanan yang baik dikonsumsi ibu hamil perlu mengandung nutrisi yang seimbang agar janin tumbuh sehat dalam kandungan. Adapun beberapa rekomendasi makanan untuk ibu hamil adalah sebagai berikut.</string>
     <string name="daily_scanned_food">Makanan harian yang dipindai</string>
+    <string name="no_article_available">No Article Available</string>
 </resources>

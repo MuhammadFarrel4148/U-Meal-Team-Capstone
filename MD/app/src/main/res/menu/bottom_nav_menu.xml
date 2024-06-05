@@ -4,11 +4,13 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/home_icon_24"
+        android:background="@drawable/active_bottom_tab_indicator"
         android:title="@string/title_home" />
 
     <item
         android:id="@+id/navigation_dashboard"
         android:icon="@drawable/search_icon_24"
+        android:background="@drawable/active_bottom_tab_indicator"
         android:title="@string/title_dashboard" />
 
     <item
