@@ -142,7 +142,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:scrollbars="horizontal"
-            tools:listitem="@layout/article_item" />
+            android:visibility="gone"
+            tools:listitem="@layout/article_item"/>
     </LinearLayout>
 
     <LinearLayout
@@ -161,6 +162,7 @@
             android:text="@string/daily_scanned_food"
             android:textColor="?attr/textAppearanceBody1"
             android:textSize="16sp" />
+
 
     </LinearLayout>
 
