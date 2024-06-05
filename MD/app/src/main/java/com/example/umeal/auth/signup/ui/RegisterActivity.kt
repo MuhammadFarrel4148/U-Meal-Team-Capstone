@@ -41,6 +41,7 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
         binding.btnSignup.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))

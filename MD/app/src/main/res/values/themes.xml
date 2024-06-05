@@ -1,6 +1,13 @@
 <resources>
     <style name="Base.Theme.UMeal" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/matcha50</item>
+        <item name="colorSecondary">@color/matcha70</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorContainer">@color/gray10</item>
+        <item name="textAppearanceBody1">@color/black50</item>
+        <item name="textAppearanceBody2">@color/gray50</item>
+
+
     </style>
 
     <style name="Theme.UMeal" parent="Base.Theme.UMeal" />
