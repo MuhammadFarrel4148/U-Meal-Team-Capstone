@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
     tools:context=".home.ui.profile.ProfileFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="24dp"
         android:text="@string/title_profile"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp"
@@ -20,7 +20,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="32dp"
+        android:paddingHorizontal="24dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_profile_image"
@@ -66,6 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:paddingHorizontal="24dp"
         android:text="@string/more"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp"
@@ -75,8 +77,13 @@
         android:id="@+id/buttonPrivacyPolice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ripple_effect"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="8dp"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -105,8 +112,10 @@
         android:id="@+id/buttonFaq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="8dp"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -135,6 +144,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:paddingHorizontal="24dp"
         android:text="@string/authentication"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="14sp"
@@ -144,8 +154,10 @@
         android:id="@+id/buttonChangePassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="8dp"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -174,8 +186,10 @@
         android:id="@+id/buttonLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="8dp"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
