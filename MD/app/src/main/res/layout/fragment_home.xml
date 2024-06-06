@@ -120,7 +120,7 @@
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ProgressBar
                 android:id="@+id/loadingBar"
@@ -142,7 +142,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:scrollbars="horizontal"
-            android:visibility="gone"
             tools:listitem="@layout/article_item"/>
     </LinearLayout>
 
@@ -162,8 +161,6 @@
             android:text="@string/daily_scanned_food"
             android:textColor="?attr/textAppearanceBody1"
             android:textSize="16sp" />
-
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

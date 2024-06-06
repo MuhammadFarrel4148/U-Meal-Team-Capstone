@@ -52,4 +52,14 @@
     <string name="article_desc">Makanan yang baik dikonsumsi ibu hamil perlu mengandung nutrisi yang seimbang agar janin tumbuh sehat dalam kandungan. Adapun beberapa rekomendasi makanan untuk ibu hamil adalah sebagai berikut.</string>
     <string name="daily_scanned_food">Makanan harian yang dipindai</string>
     <string name="no_article_available">No Article Available</string>
+    <string name="profile_name">Bella Porch</string>
+    <string name="profile_email">bellaporch123@gmail.com</string>
+    <string name="more">Lainnya</string>
+    <string name="privacy_police">Privacy Police</string>
+    <string name="faq">FAQ</string>
+    <string name="authentication">Autentikasi</string>
+    <string name="change_password">Ubah password</string>
+    <string name="logout">Logout</string>
+    <string name="phone_number">+62812345678912</string>
+    <string name="back">Kembali</string>
 </resources>
