@@ -1,28 +1,11 @@
-const users = [
+const mysql = require('mysql2/promise');
+require('dotenv').config();
 
-]
+const dbase = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD ||'',
+    database: process.env.DB_NAME,
+});
 
-const foods = [
-    {
-        name: 'tempe',
-        protein: 30,
-        karbohidrat: 25,
-        serat: 15
-    },
-    {
-        name: 'tahu',
-        protein: 15,
-        karbohidrat: 15,
-        serat: 15
-    }
-]
-
-let otp = [
-
-]
-
-const blacklistedToken = [
-
-]
-
-module.exports = { users, foods, otp, blacklistedToken }
+module.exports = dbase
