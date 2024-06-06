@@ -21,4 +21,77 @@
     <string name="title_scan">Scan</string>
     <string name="title_history">History</string>
     <string name="title_profile">Profile</string>
+    <string name="prompt_password">Password</string>
+    <string name="invalid_password">Password harus >8 characters</string>
+    <string name="prompt_email">Email</string>
+    <string name="error_email">Format email salah</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_welcome_homepage">Halo selamat datang,</string>
+    <string name="moms_name">Mommy %s</string>
+    <string name="fulfilled_daily_calories">Kalori harian terpenuhi</string>
+    <string name="trimester">Trimester %s</string>
+    <string name="calories_count">%s/%s</string>
+    <string name="popular_article">Artikel populer</string>
+    <string name="article_title">10 Rekomendasi Makanan Sehat untuk Ibu Hamil</string>
+    <string name="article_desc">Makanan yang baik dikonsumsi ibu hamil perlu mengandung nutrisi yang seimbang agar janin tumbuh sehat dalam kandungan. Adapun beberapa rekomendasi makanan untuk ibu hamil adalah sebagai berikut.</string>
+    <string name="daily_scanned_food">Makanan harian yang dipindai</string>
+    <string name="no_article_available">No Article Available</string>
+    <string name="profile_name">Bella Porch</string>
+    <string name="profile_email">bellaporch123@gmail.com</string>
+    <string name="more">Lainnya</string>
+    <string name="privacy_police">Privacy Police</string>
+    <string name="faq">FAQ</string>
+    <string name="authentication">Autentikasi</string>
+    <string name="change_password">Ubah password</string>
+    <string name="logout">Logout</string>
+    <string name="phone_number">+62812345678912</string>
+    <string name="back">Kembali</string>
+    <string name="umeal_privacy_police">Kebijakan Privasi U-Meal</string>
+    <string name="privacy_police_1">1. Pengembang</string>
+    <string name="privacy_police_1_desc">Kami adalah tim kecil yang berdedikasi dari Bangkit Academy yang bekerja pada proyek aplikasi U-Meal. Aplikasi ini dirancang khusus untuk membantu ibu hamil dalam memantau dan memahami nutrisi yang mereka konsumsi dengan tujuan untuk mengurangi angka stunting di Indonesia.</string>
+    <string name="privacy_police_2">2. Informasi yang Kami Kumpulkan</string>
+    <string name="privacy_police_21">2.1 Informasi Pribadi</string>
+    <string name="privacy_police_21_desc">Saat mendaftar ke U-Meal, kami mengumpulkan informasi pribadi berikut:</string>
+    <string name="privacy_police_21_desc_1">• Nama: Untuk mengidentifikasi pengguna.</string>
+    <string name="privacy_police_21_desc_2">• Email: Untuk keperluan login dan komunikasi.</string>
+    <string name="privacy_police_21_desc_3">• Nomor Telepon: Sebagai kontak alternatif untuk komunikasi terkait layanan kami.</string>
+    <string name="privacy_police_22">2.2 Informasi Penggunaan</string>
+    <string name="privacy_police_22_desc">Selain informasi pribadi, kami juga mengumpulkan data berikut untuk meningkatkan layanan kami:</string>
+    <string name="privacy_police_22_desc_1">• Gambar Makanan: Gambar yang Anda pindai untuk menganalisis kandungan nutrisi.</string>
+    <string name="privacy_police_22_desc_2">• Data Penggunaan Aplikasi: Informasi tentang bagaimana Anda menggunakan aplikasi, yang membantu kami memahami dan meningkatkan fitur-fitur aplikasi.</string>
+    <string name="privacy_police_3">3. Penggunaan Informasi</string>
+    <string name="privacy_police_3_desc">Informasi yang kami kumpulkan digunakan untuk tujuan berikut:</string>
+    <string name="privacy_police_3_desc_1">• Peningkatan Layanan: Data yang dikumpulkan dari gambar makanan digunakan untuk mengembangkan dan meningkatkan akurasi aplikasi dalam mendeteksi nutrisi.</string>
+    <string name="privacy_police_3_desc_2">• Keamanan Akun: Informasi pribadi digunakan untuk mengamankan akun pengguna dan memfasilitasi login.</string>
+    <string name="privacy_police_3_desc_3">• Komunikasi: Email dan nomor telepon digunakan untuk mengirimkan informasi penting terkait akun Anda dan pemberitahuan tentang pembaruan aplikasi.</string>
+    <string name="privacy_police_4">4. Perlindungan Data</string>
+    <string name="privacy_police_4_desc">Kami berkomitmen untuk melindungi data pengguna dan telah menerapkan langkah-langkah keamanan berikut:</string>
+    <string name="privacy_police_4_desc_1">• Keamanan Cloud: Data yang disimpan dalam aplikasi U-Meal dijaga dengan teknologi enkripsi dan prosedur keamanan yang ketat untuk mencegah akses yang tidak sah.</string>
+    <string name="privacy_police_4_desc_2">• Pembatasan Akses: Hanya anggota tim yang memiliki izin yang dapat mengakses data pribadi Anda, dan mereka hanya dapat melakukannya untuk tujuan yang diizinkan.</string>
+    <string name="privacy_police_4_desc_3">• Pembaruan Keamanan: Kami terus-menerus memperbarui sistem keamanan kami untuk menghadapi ancaman dan kerentanan yang baru.</string>
+    <string name="privacy_police_5">5. Hak Pengguna</string>
+    <string name="privacy_police_5_desc">Sebagai pengguna U-Meal, Anda memiliki hak untuk:</string>
+    <string name="privacy_police_5_desc_1">• Mengakses Informasi: Meminta salinan informasi pribadi yang kami simpan.</string>
+    <string name="privacy_police_5_desc_2">• Memperbarui atau Mengoreksi Data: Mengubah atau memperbarui informasi pribadi yang tidak akurat.</string>
+    <string name="privacy_police_6">6. Perubahan pada Kebijakan Privasi</string>
+    <string name="privacy_police_6_desc">Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu untuk mencerminkan perubahan dalam praktek kami atau untuk kepatuhan dengan peraturan yang berlaku. Kami akan memberi tahu pengguna tentang perubahan material melalui email atau pemberitahuan di aplikasi.</string>
+    <string name="privacy_police_7">7. Hubungi Kami</string>
+    <string name="privacy_police_7_desc">Jika Anda memiliki pertanyaan atau kekhawatiran tentang Kebijakan Privasi ini atau tentang pengelolaan data Anda oleh U-Meal, silakan hubungi kami melalui email di umeal@gmail.com.</string>
+    <string name="privacy_police_last">Kami menghargai kepercayaan Anda dalam menggunakan U-Meal dan berkomitmen untuk melindungi privasi Anda. Terima kasih telah memilih aplikasi kami untuk mendukung kesehatan dan nutrisi Anda.</string>
 </resources>

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/create_account"
-        android:textColor="@color/black50"
+        android:textColor="?attr/textAppearanceBody1"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/username"
-        android:textColor="@color/black50"
+        android:textColor="?attr/textAppearanceBody1"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tvWelcome"
         app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/email_address"
-        android:textColor="@color/black50"
+        android:textColor="?attr/textAppearanceBody1"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/usernameInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/usernameInputLayout" />
@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/password"
-        android:textColor="@color/black50"
+        android:textColor="?attr/textAppearanceBody1"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/emailInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/emailInputLayout" />
@@ -127,7 +127,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@drawable/button_bg"
+        android:background="@drawable/button_ripple_effect"
         android:text="@string/signup"
         app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout"
         tools:layout_editor_absoluteX="16dp" />

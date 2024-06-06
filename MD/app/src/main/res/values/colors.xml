@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black">#0A0A0A</color>
+    <color name="white">#FCFCFC</color>
     <color name="black50">#303030</color>
     <color name="gray50">#87878F</color>
     <color name="gray30">#BBBBBB</color>
@@ -10,6 +10,8 @@
     <color name="matcha50">#5EAE98</color>
     <color name="matcha70">#387667</color>
     <color name="matcha90">#294E47</color>
-    <color name="yellow">#E9A61A</color>
     <color name="red">#E74C3C</color>
+    <color name="yellow">#E9A61A</color>
+    <color name="black60">#171717</color>
+    <color name="white50">#939192</color>
 </resources>
