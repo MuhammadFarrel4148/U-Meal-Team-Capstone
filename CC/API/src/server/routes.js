@@ -1,4 +1,4 @@
-const { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, GetFoods, GetTotalKalori, UploadImage  } = require('./handler')
+const { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, GetFoods, GetTotalKalori, ScanImage  } = require('./handler')
 
 const routes = [
     {
@@ -44,7 +44,7 @@ const routes = [
     },
     {
         method: 'POST',
-        path: '/upload',
+        path: '/scan',
         options: {
             payload: {
                 output: 'stream',
@@ -52,9 +52,9 @@ const routes = [
                 maxBytes: 10485760, // 10 MB
                 parse: true,
                 multipart: true
-            },
-            handler: (request, h) => AccessValidation(request, h) && UploadImage(request, h)
-        }
+            },  
+        },
+        handler: ScanImage //(request, h) => AccessValidation(request, h) && ScanImage(request, h)
     }
 ]
 

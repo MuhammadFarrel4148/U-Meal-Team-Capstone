@@ -20,13 +20,13 @@
         android:layout_height="70dp"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        app:elevation="5dp"
-        app:itemTextAppearanceActiveBoldEnabled="false"
-        app:itemActiveIndicatorStyle="@android:color/transparent"
         android:backgroundTint="?attr/colorSurface"
-        app:itemRippleColor="@null"
-        app:itemTextColor="@color/navigation_bar_item_with_indicator_icon_tint"
+        app:elevation="5dp"
+        app:itemActiveIndicatorStyle="@android:color/transparent"
         app:itemIconTint="@color/navigation_bar_item_with_indicator_icon_tint"
+        app:itemRippleColor="@null"
+        app:itemTextAppearanceActiveBoldEnabled="false"
+        app:itemTextColor="@color/navigation_bar_item_with_indicator_icon_tint"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -44,5 +44,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:contentDescription="@string/scan_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:shapeAppearanceOverlay="@style/CircleFab"
+        app:srcCompat="@drawable/scan_icon" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

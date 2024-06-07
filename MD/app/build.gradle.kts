@@ -23,7 +23,7 @@ android {
         buildConfigField(
             "String",
             "ARTICLE_API_KEY",
-            "\"pub_456319438ad0539ed13b7719887d65545b4fe\""
+            "\"pub_45631745044b656feaf52d60fd622d1cc2df1\""
         )
     }
 

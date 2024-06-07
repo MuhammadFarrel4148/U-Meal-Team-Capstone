@@ -16,7 +16,7 @@ class ArticleRepository(
     fun getArticles(): LiveData<ResultState<List<ResultsItem>>> = liveData {
         emit(ResultState.Loading)
         try {
-            val successResponse = apiService.getNews(apiKey = BuildConfig.ARTICLE_API_KEY)
+            val successResponse = apiService.getNews(apikey = BuildConfig.ARTICLE_API_KEY)
             emit(ResultState.Success(successResponse.results))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.toString()
