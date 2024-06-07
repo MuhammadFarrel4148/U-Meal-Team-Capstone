@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import com.example.umeal.R
 import com.example.umeal.auth.login.ui.LoginActivity
 import com.example.umeal.databinding.FragmentHomeBinding
@@ -27,6 +28,19 @@ class ProfileFragment : Fragment() {
 
         binding.buttonPrivacyPolice.setOnClickListener {
             startActivity(Intent(this.context, PrivacyPoliceActivity::class.java))
+        }
+
+        binding.buttonLogout.setOnClickListener {
+            AlertDialog.Builder(requireActivity()).apply {
+                setTitle("Log out!")
+                setMessage("Are you sure you want to logout?")
+                setPositiveButton("Log out") { _, _ ->
+
+                }
+                setNegativeButton("No", null)
+                create()
+                show()
+            }
         }
         return root
     }

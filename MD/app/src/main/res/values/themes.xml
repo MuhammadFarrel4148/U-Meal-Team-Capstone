@@ -41,5 +41,10 @@
         <item name="strokeWidth">0.5dp</item>
         <item name="strokeColor">@color/gray30</item>
     </style>
+    
+    <style name="CircleFab">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 
 </resources>

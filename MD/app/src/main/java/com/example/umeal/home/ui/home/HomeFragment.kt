@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
 
     private var dailyProgress: Double = 0.0
     private var userDailyCalories: Int = 0
-    private var userFulfilledCalories: Int = 720
+    private var userFulfilledCalories: Int = 2500
     private var userTrimester: Int = 1
 
     override fun onCreateView(
