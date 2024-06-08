@@ -100,4 +100,8 @@
     <string name="image_banner">image banner</string>
     <string name="banner_headline">Kalori harian Ibu Hamil terus berubah!</string>
     <string name="banner_subheadline">Ayo hitung kebutuhan kalori harian mu</string>
+    <string name="image_scan">Image Scan</string>
+    <string name="jam_makan">Jam Makan</string>
+    <string name="makan_siang">Makan Siang</string>
+    <string name="makanan_terdeteksi">Makanan Terdeteksi</string>
 </resources>

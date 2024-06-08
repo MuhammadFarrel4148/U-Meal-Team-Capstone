@@ -81,4 +81,7 @@ dependencies {
 
     //uCrop
     implementation (libs.ucrop)
+
+    //lottie
+    implementation (libs.lottie)
 }
