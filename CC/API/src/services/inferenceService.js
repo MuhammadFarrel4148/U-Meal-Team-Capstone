@@ -22,18 +22,18 @@ const predictHandler = async(model, image) => {
             const data = prediction[key].arraySync() 
 
             // Log the data for debugging
-            console.log(`Data for key ${key}:`, data);
+            console.log(`Data for key ${key}:`, data)
 
             // Check if data is an array or a single value
             if (Array.isArray(data)) {
                 data.forEach((value, index) => {
                     if (value >= 0) { 
-                        predictedLabels.push(labels[index]);
+                        predictedLabels.push(labels[index])
                     }
                 })
             } else {
                 if (data >= 0) { 
-                    predictedLabels.push(labels[key]);
+                    predictedLabels.push(labels[key])
                 }
             }
         }

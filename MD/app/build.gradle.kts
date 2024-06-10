@@ -78,4 +78,10 @@ dependencies {
 
     //Glide
     implementation(libs.glide)
+
+    //uCrop
+    implementation (libs.ucrop)
+
+    //lottie
+    implementation (libs.lottie)
 }

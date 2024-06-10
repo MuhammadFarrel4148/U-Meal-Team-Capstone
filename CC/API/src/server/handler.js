@@ -57,6 +57,7 @@ const SignUp = async (request, h) => {
     try {
         // Cek apakah email sudah digunakan
         const [existingUsers] = await dbase.query('SELECT id FROM users WHERE email = ?', [email])
+
         if (existingUsers.length > 0) {
             const response = h.response({
                 status: 'fail',
@@ -67,7 +68,7 @@ const SignUp = async (request, h) => {
         }
 
         // Tambahkan pengguna baru
-        const id = nanoid()
+        const id = nanoid(16)
         const [result] = await dbase.query('INSERT INTO users (id, username, email, phonenumber, password) VALUES (?, ?, ?, ?, ?)', [id, username, email, phonenumber, password])
 
         if (result.affectedRows === 1) {
@@ -89,7 +90,7 @@ const SignUp = async (request, h) => {
             throw new Error('User gagal ditambahkan');
         }
     } catch (error) {
-        console.error('Error:', error)
+        console.error('Error', error)
         const response = h.response({
             status: 'fail',
             message: 'User gagal ditambahkan'
