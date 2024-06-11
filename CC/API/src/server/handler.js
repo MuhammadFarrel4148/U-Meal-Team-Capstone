@@ -2,8 +2,9 @@ const dbase = require('./database')
 const { nanoid } = require('nanoid')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
-const predictHandler = require('../services/inferenceService')
 const crypto = require('crypto')
+const axios = require('axios')
+const FormData = require('form-data')
 const JWT_SECRET = process.env.JWT_SECRET
 
 const streamToBuffer = async(stream) => {
@@ -20,36 +21,54 @@ const GenerateToken = (user) => {
     return token
 }
 
-const AccessValidation = (request, h) => {
+const blacklistToken = async (token) => {
+    await dbase.query('INSERT INTO blacklisted_tokens (token) VALUES (?)', [token])
+}
+
+const isTokenBlacklisted = async (token) => {
+    const result = await dbase.query('SELECT COUNT(*) AS count FROM blacklisted_tokens WHERE token = ?', [token])
+    return result[0][0].count > 0
+}
+
+const AccessValidation = async (request, h) => {
     const authorization = request.headers.authorization
-    
-    if(!authorization) {
+
+    if (!authorization) {
         const response = h.response({
             status: 'fail',
             message: 'Token tidak ditemukan'
         })
         response.code(401)
-        return response
+        return response.takeover()
     }
 
     const token = authorization.split(' ')[1]
 
     try {
-        const jwtDecode = jwt.verify(token, JWT_SECRET)
-        return jwtDecode
+        // Periksa apakah token ada dalam daftar blacklist
+        const isBlacklisted = await isTokenBlacklisted(token)
+        if (isBlacklisted) {
+            const response = h.response({
+                status: 'fail',
+                message: 'Token telah di-blacklist'
+            })
+            response.code(401)
+            return response.takeover()
+        }
 
-    } catch(error) {
+        // Verifikasi token
+        const jwtDecode = jwt.verify(token, JWT_SECRET)
+        request.auth = { credentials: jwtDecode }
+        return h.continue
+
+    } catch (error) {
         const response = h.response({
             status: 'fail',
             message: 'Unauthorized'
         })
         response.code(401)
-        return response
+        return response.takeover()
     }
-}
-
-const blacklistToken = async (token) => {
-    await dbase.query('INSERT INTO blacklisted_tokens (token) VALUES (?)', [token])
 }
 
 const SignUp = async (request, h) => {
@@ -197,7 +216,7 @@ const ForgotPasswordChangePassword = async (request, h) => {
         if (otps.length === 1) {
             const email = otps[0].email
             await dbase.query('UPDATE users SET password = ? WHERE email = ?', [newPassword, email])
-            await dbase.query('DELETE FROM otp WHERE codeotp = ?', [codeotp]);
+            await dbase.query('DELETE FROM otp WHERE codeotp = ?', [codeotp])
 
             const response = h.response({
                 status: 'success',
@@ -225,124 +244,86 @@ const ForgotPasswordChangePassword = async (request, h) => {
 }
 
 const Logout = async (request, h) => {
-    const authorization = request.headers.authorization;
+    const authorization = request.headers.authorization
 
     if (!authorization) {
         const response = h.response({
             status: 'fail',
             message: 'Unauthorized'
         });
-        response.code(401);
-        return response;
+        response.code(401)
+        return response
     }
 
-    const token = authorization.split(' ')[1];
+    const token = authorization.split(' ')[1]
 
-    const [blacklistedTokens] = await dbase.query('SELECT token FROM blacklisted_tokens WHERE token = ?', [token]);
+    const [blacklistedTokens] = await dbase.query('SELECT token FROM blacklisted_tokens WHERE token = ?', [token])
     if (blacklistedTokens.length > 0) {
         const response = h.response({
             status: 'fail',
             message: 'Unauthorized'
         });
-        response.code(401);
-        return response;
+        response.code(401)
+        return response
     }
 
     try {
-        jwt.verify(token, JWT_SECRET);
-        await blacklistToken(token);
+        jwt.verify(token, JWT_SECRET)
+        await blacklistToken(token)
 
         const response = h.response({
             status: 'success',
             message: 'Logout berhasil'
         });
-        response.code(200);
-        return response;
+        response.code(200)
+        return response
     } catch (error) {
         const response = h.response({
             status: 'fail',
             message: 'Unauthorized'
         });
-        response.code(401);
-        return response;
-    }
-}
-
-const GetFoods = async (request, h) => {
-    try {
-        const [foods] = await dbase.query('SELECT name, protein, karbohidrat, serat FROM foods')
-        const foodsAndKalori = foods.map(food => {
-            const totalCalories = food.protein + food.karbohidrat + food.serat;
-            return { ...food, totalCalories }
-        });
-
-        const response = h.response({
-            status: 'success',
-            data: {
-                foods: foodsAndKalori
-            }
-        });
-        response.code(200)
-        return response
-    } catch (error) {
-        console.error('Error getting foods:', error)
-        const response = h.response({
-            status: 'fail',
-            message: 'Gagal mengambil data makanan'
-        });
-        response.code(500)
-        return response
-    }
-}
-
-const GetTotalKalori = async (request, h) => {
-    try {
-        const [foods] = await dbase.query('SELECT protein, karbohidrat, serat FROM foods');
-        const totalKalori = foods.reduce((acc, food) => acc + food.protein + food.karbohidrat + food.serat, 0)
-
-        const response = h.response({
-            status: 'success',
-            data: {
-                totalKalori
-            }
-        });
-        response.code(200)
-        return response
-    } catch (error) {
-        console.error('Error getting total calories:', error);
-        const response = h.response({
-            status: 'fail',
-            message: 'Gagal menghitung total kalori'
-        });
-        response.code(500)
+        response.code(401)
         return response
     }
 }
 
 const ScanImage = async (request, h) => {
-    const { image } = request.payload
-    const { model } = request.server.app
-
-    const imageBuffer = await streamToBuffer(image)
     
-    const { results } = await predictHandler(model, imageBuffer)
+    const { image } = request.payload
+    const imageBuffer = await streamToBuffer(image)
+
+    // Prepare form data
+    const form = new FormData();
+    form.append('image', imageBuffer, {
+        filename: 'upload.jpg',
+        contentType: 'image/jpeg',
+    })
+
+    // Send POST request to Flask API
+    const flaskApiResponse = await axios.post('http://127.0.0.1:8080/scan', form, {
+        headers: form.getHeaders(),
+    })
+
+    // Process response from Flask API
+    const detected_labels = flaskApiResponse.data
     const id = crypto.randomUUID()
     const createdAt = new Date().toISOString()
 
     const data = {
         id: id,
-        result: results,
-        createdAt: createdAt
-    };
+        result: detected_labels,
+        createdAt: createdAt,
+    }
 
     const response = h.response({
         status: 'success',
         message: 'Model is predicted successfully',
-        data
+        data,
     })
 
     response.code(201)
     return response
+    
 }
 
-module.exports = { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, GetFoods, GetTotalKalori, ScanImage }
+module.exports = { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, ScanImage }
