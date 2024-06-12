@@ -14,7 +14,7 @@ class ArticleRepository(
     private val apiService: ArticleApiService,
 ) {
     fun getArticles(): LiveData<ResultState<List<ResultsItem>>> = liveData {
-        emit(ResultState.Loading)
+        emit(ResultState.Loading())
         try {
             val successResponse = apiService.getNews(apikey = BuildConfig.ARTICLE_API_KEY)
             emit(ResultState.Success(successResponse.results))
@@ -29,9 +29,9 @@ class ArticleRepository(
         @Volatile
         private var instance: ArticleRepository? = null
         fun getInstance(
-            apiService: ArticleApiService
+            articleApiService: ArticleApiService
         ): ArticleRepository = instance ?: synchronized(this) {
-            instance ?: ArticleRepository(apiService)
+            instance ?: ArticleRepository(articleApiService)
         }.also { instance = it }
     }
 }

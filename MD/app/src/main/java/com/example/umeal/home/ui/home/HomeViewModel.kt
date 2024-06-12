@@ -18,7 +18,7 @@ class HomeViewModel(private val repository: ArticleRepository) : ViewModel() {
     val dailyCalorieResult: LiveData<ResultState<Int>> = _dailyCalorieResult
 
     fun getUserDailyCalories(trimester: Int) {
-        _dailyCalorieResult.postValue(ResultState.Loading)
+        _dailyCalorieResult.postValue(ResultState.Loading())
 
         val newCalories = when (trimester) {
             1 -> 1800
