@@ -300,7 +300,7 @@ const ScanImage = async (request, h) => {
     })
 
     // Send POST request to Flask API
-    const flaskApiResponse = await axios.post('http://127.0.0.1:8080/scan', form, {
+    const flaskApiResponse = await axios.post('http://localhost:8080/scan', form, {
         headers: form.getHeaders(),
     })
 
