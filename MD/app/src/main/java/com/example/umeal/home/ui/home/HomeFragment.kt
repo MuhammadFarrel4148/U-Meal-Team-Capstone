@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
                 }
 
                 is ResultState.Error -> {
-                    Toast.makeText(view?.context, result.error, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(view?.context, result.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -84,14 +84,16 @@ class HomeFragment : Fragment() {
                     }
 
                     is ResultState.Success -> {
-                        if (result.data.isEmpty()) {
+                        if (result.data?.isEmpty() == true) {
                             binding.loadingFrame.visibility = View.VISIBLE
                             binding.loadingBar.visibility = View.GONE
                             binding.tvNoArticle.visibility = View.VISIBLE
                         } else {
                             binding.loadingFrame.visibility = View.GONE
                             val articleData = result.data
-                            articlesAdapter.submitList(articleData)
+                            if (articleData != null) {
+                                articlesAdapter.submitList(articleData)
+                            }
                         }
                     }
 
