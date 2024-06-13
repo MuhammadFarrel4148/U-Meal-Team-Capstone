@@ -306,21 +306,18 @@ const Logout = async (request, h) => {
 }
 
 const generateUniqueScanId = async () => {
-    let scanId;
-    let isUnique = false;
-
-    while (!isUnique) {
-        // Generate a 4-digit random number as a string
-        scanId = (Math.floor(1000 + Math.random() * 9000)).toString();
-
-        // Check if the generated scanId already exists in the database
-        const [existingScan] = await dbase.query('SELECT scan_id FROM scans WHERE scan_id = ?', [scanId]);
-        if (existingScan.length === 0) {
-            isUnique = true;
+    let uniqueIdFound = false;
+    let newId;
+    while (!uniqueIdFound) {
+        // Generate random 4 digit number within the range 1000-9999
+        newId = Math.floor(1000 + Math.random() * 9000);
+        // Check if the ID already exists in the database
+        const [rows] = await dbase.query('SELECT id FROM scans WHERE id = ?', [newId]);
+        if (rows.length === 0) {
+            uniqueIdFound = true;
         }
     }
-
-    return scanId;
+    return newId;
 };
 
 const ScanImage = async (request, h) => {
@@ -349,7 +346,6 @@ const ScanImage = async (request, h) => {
         const gcsFilename = `${id_pict}.jpg`
         const imageUrl = await SaveImagetoGCS(imageBuffer, gcsFilename);
 
-        // Retrieve calories for detected foods and calculate total calories
         let totalCalories = 0;
         const foodEntries = [];
         for (const foodName of detectedLabels) {
@@ -361,24 +357,22 @@ const ScanImage = async (request, h) => {
             }
         }
 
-        // Generate a unique 4-digit scan_id
         const scanId = await generateUniqueScanId();
 
-        // Insert into scans table
-        await dbase.query('INSERT INTO scans (scan_id, user_id, total_kalori, scan_timestamp) VALUES (?, ?, ?, ?)', [scanId, userId, totalCalories, scanTimestamp]);
+        await dbase.query('INSERT INTO scans (id, user_id, total_kalori, scan_timestamp) VALUES (?, ?, ?, ?)', [scanId, userId, totalCalories, scanTimestamp]);
 
-        // Insert into scan_details table
-        const scanDetailsValues = foodEntries.map(entry => [scanId, entry.jenis, entry.kalori]);
+        const scanDetailsValues = foodEntries.map(entry => [scanId, userId, entry.jenis, entry.kalori]);
         for (const values of scanDetailsValues) {
-            await dbase.query('INSERT INTO scan_details (scan_id, jenis, kalori) VALUES (?, ?, ?)', values);
+            await dbase.query('INSERT INTO scan_details (scans_id, user_id, jenis, kalori) VALUES (?, ?, ?, ?)', values);
         }
 
-        // Prepare response data
+        const [daftarScan] = await dbase.query('SELECT jenis, kalori FROM scan_details WHERE scans_id = ?', [scanId]);
+
         const data = {
             imageUrl: imageUrl,
             scanId,
             totalCalories,
-            detectedFoods: foodEntries,
+            detectedFoods: daftarScan,
             scanTimestamp
         };
 
@@ -400,8 +394,6 @@ const ScanImage = async (request, h) => {
         return response;
     }
 };
-
-
 
 
 module.exports = { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, ScanImage }
