@@ -108,4 +108,7 @@
     <string name="check">Periksa Kembali Email dan Password</string>
     <string name="enter_phone_number">Masukkan No. Handphone</string>
     <string name="success_register">Berhasil Daftar Akun</string>
+    <string name="error_no_image">Gambar Tidak Tersedia</string>
+    <string name="success_add_story">Sukses Mengupload Gambar</string>
+    <string name="error_add_story">Gagal Mengupload Gambar</string>
 </resources>

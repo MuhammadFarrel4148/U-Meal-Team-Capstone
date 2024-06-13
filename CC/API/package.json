@@ -11,8 +11,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google-cloud/storage": "^7.11.2",
     "@hapi/hapi": "^21.3.9",
-    "@tensorflow/tfjs-node": "^4.20.0",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "form-data": "^4.0.0",

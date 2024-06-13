@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer')
 const crypto = require('crypto')
 const axios = require('axios')
 const FormData = require('form-data')
+const { Storage } = require('@google-cloud/storage')
 const JWT_SECRET = process.env.JWT_SECRET
 
 const streamToBuffer = async(stream) => {
@@ -15,6 +16,14 @@ const streamToBuffer = async(stream) => {
         stream.on('error', reject)
     });
 };
+
+const storage = new Storage({
+    projectId: process.env.PROJECTID,
+    keyFilename: process.env.KEYSERVICEACCOUNT
+}) 
+
+const bucketName = process.env.BUCKETNAME
+const bucket = storage.bucket(bucketName) 
 
 const GenerateToken = (user) => {
     const token = jwt.sign({id: user.id, email: user.email}, JWT_SECRET, {expiresIn: '1h'})
@@ -29,6 +38,15 @@ const isTokenBlacklisted = async (token) => {
     const result = await dbase.query('SELECT COUNT(*) AS count FROM blacklisted_tokens WHERE token = ?', [token])
     return result[0][0].count > 0
 }
+
+const SaveImagetoGCS = async(imageBuffer, filename) => {
+    const file = bucket.file(filename);
+    await file.save(imageBuffer, {
+        contentType: 'image/jpeg',
+        public: true,
+    })
+    return `https://storage.googleapis.com/${bucketName}/${filename}`;
+} 
 
 const AccessValidation = async (request, h) => {
     const authorization = request.headers.authorization
@@ -323,6 +341,10 @@ const ScanImage = async (request, h) => {
         const detectedLabels = flaskApiResponse.data; // assume this is an array of food names
         const userId = request.auth.credentials.id;
         const scanTimestamp = new Date();
+        const id_pict = nanoid(4)
+
+        const gcsFilename = `${id_pict}.jpg`
+        const imageUrl = await SaveImagetoGCS(imageBuffer, gcsFilename);
 
         let totalCalories = 0;
         const foodEntries = [];
@@ -347,6 +369,7 @@ const ScanImage = async (request, h) => {
         const [daftarScan] = await dbase.query('SELECT jenis, kalori FROM scan_details WHERE scans_id = ?', [scanId]);
 
         const data = {
+            imageUrl: imageUrl,
             scanId,
             totalCalories,
             detectedFoods: daftarScan,
