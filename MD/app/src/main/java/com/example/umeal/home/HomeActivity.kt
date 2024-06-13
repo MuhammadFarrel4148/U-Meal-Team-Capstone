@@ -3,14 +3,11 @@ package com.example.umeal.home
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -21,33 +18,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.coroutineScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.umeal.R
 import com.example.umeal.databinding.ActivityHomeBinding
-import com.example.umeal.home.ui.scan.ResponseScanImage
 import com.example.umeal.home.ui.scan.ScanImageViewModel
 import com.example.umeal.home.ui.scan.ScanImageViewModelFactory
-import com.example.umeal.data.ResultState
 import com.example.umeal.data.repository.DataRepository
 import com.example.umeal.data.retrofit.ApiConfig
 import com.example.umeal.home.ui.scan.ScanResult
 import com.example.umeal.utils.PreferenceManager
 import com.yalantis.ucrop.UCrop
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -56,18 +41,24 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var currentPhotoPath: String
     private var selectedFile: File? = null
-    private var uploadJob: Job = Job()
     private lateinit var viewModel: ScanImageViewModel
 
     private lateinit var preferenceManager: PreferenceManager
 
-    private val requestCameraPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            startTakePhoto()
+    private val requestCameraAndStoragePermissionsLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val cameraPermissionGranted = permissions[Manifest.permission.CAMERA] ?: false
+        val readExternalStoragePermissionGranted = if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+            permissions[Manifest.permission.READ_EXTERNAL_STORAGE] ?: false
         } else {
-            Toast.makeText(this, "Camera permission is required to use the camera", Toast.LENGTH_SHORT).show()
+            true
+        }
+
+        if (cameraPermissionGranted && readExternalStoragePermissionGranted) {
+            showImageSourceDialog()
+        } else {
+            Toast.makeText(this, "Camera and storage permissions are required to use this feature", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -87,10 +78,11 @@ class HomeActivity : AppCompatActivity() {
         setupNavigation()
 
         binding.buttonScan.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 showImageSourceDialog()
             } else {
-                requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                requestCameraAndStoragePermissionsLauncher.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE))
             }
         }
     }
@@ -99,7 +91,7 @@ class HomeActivity : AppCompatActivity() {
         val options = arrayOf("Camera", "Gallery")
         AlertDialog.Builder(this)
             .setTitle("Choose Image Source")
-            .setItems(options) { dialog: DialogInterface, which: Int ->
+            .setItems(options) { _: DialogInterface, which: Int ->
                 when (which) {
                     0 -> startTakePhoto()
                     1 -> startGallery()
@@ -132,7 +124,7 @@ class HomeActivity : AppCompatActivity() {
             createCustomTempFile(application).also {
                 val photoURI: Uri = FileProvider.getUriForFile(
                     this,
-                    "com.example.umeal.fileprovider",
+                    "${applicationContext.packageName}.file provider",
                     it
                 )
                 currentPhotoPath = it.absolutePath
@@ -142,22 +134,20 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("IntentReset")
     private fun startGallery() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_GET_CONTENT
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
-        val chooser = Intent.createChooser(intent, "Choose a Picture")
-        launcherIntentGallery.launch(chooser)
+        launcherIntentGallery.launch(intent)
     }
 
     private val launcherIntentGallery = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            val myFile = File(currentPhotoPath)
-            selectedFile = myFile
-            val uri = Uri.fromFile(myFile)
-            startCrop(uri)
+            val selectedImg: Uri = result.data?.data as Uri
+            selectedFile = uriToFile(selectedImg, this)
+            startCrop(selectedImg)
         }
     }
 
@@ -189,78 +179,14 @@ class HomeActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             val resultUri = UCrop.getOutput(data!!)
             resultUri?.let {
-                selectedFile = uriToFile(it, this)
-                uploadImage()
+                val intent = Intent(this, ScanResult::class.java).apply {
+                    putExtra("CROPPED_IMAGE_URI", it.toString())
+                }
+                startActivity(intent)
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             UCrop.getError(data!!)?.printStackTrace()
         }
-    }
-
-    private fun createCustomTempFile(application: Application): File {
-        val storageDir: File? = application.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "JPEG_${System.currentTimeMillis()}_",
-            ".jpg",
-            storageDir
-        )
-    }
-
-    private fun uploadImage() {
-        selectedFile?.let { file ->
-            val reducedFile = reduceFileImage(file)
-            val requestImageFile = reducedFile.asRequestBody("image/jpg".toMediaTypeOrNull())
-            val imageMultipart = MultipartBody.Part.createFormData(
-                "photo",
-                reducedFile.name,
-                requestImageFile
-            )
-
-            lifecycle.coroutineScope.launchWhenResumed {
-                if (uploadJob.isActive) uploadJob.cancel()
-                uploadJob = launch {
-                    viewModel.scanImage(preferenceManager.token, imageMultipart).collect { result ->
-                        handleUploadResult(result)
-                    }
-                }
-            }
-        } ?: Toast.makeText(this, R.string.error_no_image, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun handleUploadResult(result: ResultState<ResponseScanImage>) {
-        when (result) {
-            is ResultState.Success -> {
-                Toast.makeText(this, R.string.success_add_story, Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, ScanResult::class.java))
-                finishAffinity()
-            }
-            is ResultState.Loading -> {
-                // Show a loading indicator if necessary
-            }
-            is ResultState.Error -> {
-                Toast.makeText(this, R.string.error_add_story, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun reduceFileImage(file: File): File {
-        val bitmap = BitmapFactory.decodeFile(file.path)
-        var compressQuality = 100
-        var streamLength: Int
-
-        do {
-            val bmpStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpStream)
-            val bmpPicByteArray = bmpStream.toByteArray()
-            streamLength = bmpPicByteArray.size
-            compressQuality -= 5
-        } while (streamLength > 900000) // Ensure the size is below 900 KB
-
-        FileOutputStream(file).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, out)
-        }
-
-        return file
     }
 
     private val FILENAME_FORMAT = "dd-MMM-yyyy"
@@ -275,24 +201,19 @@ class HomeActivity : AppCompatActivity() {
         return File.createTempFile(timeStamp, ".jpg", storageDir)
     }
 
-    private fun uriToFile(uri: Uri, context: Context): File {
-        val contentResolver = context.contentResolver
+    private fun uriToFile(selectedImg: Uri, context: Context): File {
+        val contentResolver: ContentResolver = context.contentResolver
         val myFile = createCustomTempFile(context)
 
-        try {
-            contentResolver.openInputStream(uri)?.use { inputStream ->
-                FileOutputStream(myFile).use { outputStream ->
-                    val buf = ByteArray(1024)
-                    var len: Int
-                    while (inputStream.read(buf).also { len = it } > 0) {
-                        outputStream.write(buf, 0, len)
-                    }
+        contentResolver.openInputStream(selectedImg)?.use { inputStream ->
+            FileOutputStream(myFile).use { outputStream ->
+                val buffer = ByteArray(1024)
+                var length: Int
+                while (inputStream.read(buffer).also { length = it } > 0) {
+                    outputStream.write(buffer, 0, length)
                 }
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
         }
-
         return myFile
     }
 }

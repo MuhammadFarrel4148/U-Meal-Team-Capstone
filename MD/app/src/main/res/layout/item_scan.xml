@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="?attr/colorSurface"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp"
+    android:background="@drawable/border_background"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,11 +13,9 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textViewName"
+            android:id="@+id/textViewFood"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginStart="14dp"
             android:layout_marginEnd="14dp"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="50dp"
-                android:layout_marginEnd="14dp"
                 android:layout_marginTop="14dp"
                 android:layout_marginBottom="14dp">
 
@@ -57,6 +56,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="10dp"
+                    android:contentDescription="Arrow"
                     android:src="@drawable/ic_right_arrow_16"
                     app:tint="@color/black" />
             </androidx.cardview.widget.CardView>

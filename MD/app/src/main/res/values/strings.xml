@@ -111,4 +111,5 @@
     <string name="error_no_image">Gambar Tidak Tersedia</string>
     <string name="success_add_story">Sukses Mengupload Gambar</string>
     <string name="error_add_story">Gagal Mengupload Gambar</string>
+    <string name="hasil_scan">Hasil Scan\n</string>
 </resources>
