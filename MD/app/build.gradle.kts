@@ -23,7 +23,17 @@ android {
         buildConfigField(
             "String",
             "ARTICLE_API_KEY",
-            "\"pub_45631745044b656feaf52d60fd622d1cc2df1\""
+            "\"pub_45631745044b656feaf52d60fd622d1cc2df1\"",
+        )
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"https://u-meal-api-twzpyhjawq-et.a.run.app/\""
+        )
+        buildConfigField(
+            "String",
+            "ARTICLE_URL",
+            "\"https://newsdata.io/api/1/\""
         )
     }
 
@@ -84,4 +94,7 @@ dependencies {
 
     //lottie
     implementation (libs.lottie)
+
+    //Coroutines
+    implementation(libs.kotlinx.coroutines.android)
 }

@@ -60,7 +60,7 @@
     <string name="authentication">Autentikasi</string>
     <string name="change_password">Ubah password</string>
     <string name="logout">Logout</string>
-    <string name="phone_number">+62812345678912</string>
+    <string name="phone_number">No. Handphone</string>
     <string name="back">Kembali</string>
     <string name="umeal_privacy_police">Kebijakan Privasi U-Meal</string>
     <string name="privacy_police_1">1. Pengembang</string>
@@ -104,4 +104,8 @@
     <string name="jam_makan">Jam Makan</string>
     <string name="makan_siang">Makan Siang</string>
     <string name="makanan_terdeteksi">Makanan Terdeteksi</string>
+    <string name="warning_input">Isi Form Dengan Benar</string>
+    <string name="check">Periksa Kembali Email dan Password</string>
+    <string name="enter_phone_number">Masukkan No. Handphone</string>
+    <string name="success_register">Berhasil Daftar Akun</string>
 </resources>

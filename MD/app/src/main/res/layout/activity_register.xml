@@ -90,6 +90,37 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/tvPhoneLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/phone_number"
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/emailInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/emailInputLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phoneInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:helperTextTextColor="@color/red"
+        app:hintEnabled="false"
+        app:hintTextAppearance="@color/gray30"
+        app:layout_constraintStart_toStartOf="@+id/tvPhoneLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvPhoneLabel">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_input_bg"
+            android:hint="@string/enter_phone_number"
+            android:inputType="phone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
         android:id="@+id/tvPasswordLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,8 +128,8 @@
         android:text="@string/password"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/emailInputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/emailInputLayout" />
+        app:layout_constraintStart_toStartOf="@+id/phoneInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/phoneInputLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordInputLayout"
@@ -127,6 +158,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:visibility="visible"
         android:background="@drawable/button_ripple_effect"
         android:text="@string/signup"
         app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout"
@@ -156,5 +188,15 @@
             android:textColor="@color/matcha50"
             android:textSize="16sp" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSignup"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignup"
+        app:layout_constraintStart_toStartOf="@+id/btnSignup"
+        app:layout_constraintTop_toTopOf="@+id/btnSignup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,7 +50,5 @@ class ProfileFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-
-    }
+    companion object
 }
