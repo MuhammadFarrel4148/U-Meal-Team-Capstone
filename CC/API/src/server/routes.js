@@ -43,7 +43,7 @@ const routes = [
                 parse: true,
                 multipart: true
             },
-            pre: [{ method: AccessValidation }] 
+            pre: [{ method: AccessValidation }]
         },
         handler: ScanImage
     }

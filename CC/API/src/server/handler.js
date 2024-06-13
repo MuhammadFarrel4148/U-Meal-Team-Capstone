@@ -287,43 +287,98 @@ const Logout = async (request, h) => {
     }
 }
 
-const ScanImage = async (request, h) => {
-    
-    const { image } = request.payload
-    const imageBuffer = await streamToBuffer(image)
+const generateUniqueScanId = async () => {
+    let scanId;
+    let isUnique = false;
 
-    // Prepare form data
-    const form = new FormData();
-    form.append('image', imageBuffer, {
-        filename: 'upload.jpg',
-        contentType: 'image/jpeg',
-    })
+    while (!isUnique) {
+        // Generate a 4-digit random number as a string
+        scanId = (Math.floor(1000 + Math.random() * 9000)).toString();
 
-    // Send POST request to Flask API
-    const flaskApiResponse = await axios.post('http://127.0.0.1:8080/scan', form, {
-        headers: form.getHeaders(),
-    })
-
-    // Process response from Flask API
-    const detected_labels = flaskApiResponse.data
-    const id = crypto.randomUUID()
-    const createdAt = new Date().toISOString()
-
-    const data = {
-        id: id,
-        result: detected_labels,
-        createdAt: createdAt,
+        // Check if the generated scanId already exists in the database
+        const [existingScan] = await dbase.query('SELECT scan_id FROM scans WHERE scan_id = ?', [scanId]);
+        if (existingScan.length === 0) {
+            isUnique = true;
+        }
     }
 
-    const response = h.response({
-        status: 'success',
-        message: 'Model is predicted successfully',
-        data,
-    })
+    return scanId;
+};
 
-    response.code(201)
-    return response
-    
-}
+const ScanImage = async (request, h) => {
+    try {
+        const { image } = request.payload;
+        const imageBuffer = await streamToBuffer(image);
+
+        // Prepare form data
+        const form = new FormData();
+        form.append('image', imageBuffer, {
+            filename: 'upload.jpg',
+            contentType: 'image/jpeg',
+        });
+
+        // Send POST request to Flask API
+        const flaskApiResponse = await axios.post('http://127.0.0.1:8080/scan', form, {
+            headers: form.getHeaders(),
+        });
+
+        // Process response from Flask API
+        const detectedLabels = flaskApiResponse.data; // assume this is an array of food names
+        const userId = request.auth.credentials.id;
+        const scanTimestamp = new Date();
+
+        // Retrieve calories for detected foods and calculate total calories
+        let totalCalories = 0;
+        const foodEntries = [];
+        for (const foodName of detectedLabels) {
+            const [foods] = await dbase.query('SELECT jenis, kalori FROM foods WHERE jenis = ?', [foodName]);
+            if (foods.length > 0) {
+                const food = foods[0];
+                totalCalories += food.kalori;
+                foodEntries.push({ jenis: food.jenis, kalori: food.kalori });
+            }
+        }
+
+        // Generate a unique 4-digit scan_id
+        const scanId = await generateUniqueScanId();
+
+        // Insert into scans table
+        await dbase.query('INSERT INTO scans (scan_id, user_id, total_kalori, scan_timestamp) VALUES (?, ?, ?, ?)', [scanId, userId, totalCalories, scanTimestamp]);
+
+        // Insert into scan_details table
+        const scanDetailsValues = foodEntries.map(entry => [scanId, entry.jenis, entry.kalori]);
+        for (const values of scanDetailsValues) {
+            await dbase.query('INSERT INTO scan_details (scan_id, jenis, kalori) VALUES (?, ?, ?)', values);
+        }
+
+        // Prepare response data
+        const data = {
+            scanId,
+            totalCalories,
+            detectedFoods: foodEntries,
+            scanTimestamp
+        };
+
+        const response = h.response({
+            status: 'success',
+            message: 'Scan berhasil disimpan',
+            data,
+        });
+        response.code(201);
+        return response;
+
+    } catch (error) {
+        console.error('Error during scan:', error);
+        const response = h.response({
+            status: 'fail',
+            message: 'Gagal melakukan scan',
+        });
+        response.code(500);
+        return response;
+    }
+};
+
+
+
 
 module.exports = { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, ScanImage }
