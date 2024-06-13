@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:enableOnBackInvokedCallback="true"
         android:theme="@style/Theme.UMeal"
-        tools:targetApi="tiramisu">
+        tools:targetApi="31">
         <activity
             android:name=".home.ui.scan.ScanResult"
             android:exported="false" />
