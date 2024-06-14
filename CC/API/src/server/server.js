@@ -26,7 +26,7 @@ const init = async() => {
                 message: 'Terjadi kesalahan dalam melakukan prediksi'
             })
             newResponse.code(response.statusCode)
-            return newResponse;
+            return newResponse
         }
 
         if(response.isBoom) {

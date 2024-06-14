@@ -14,8 +14,8 @@ const streamToBuffer = async(stream) => {
         stream.on('data', (chunk) => chunks.push(chunk))
         stream.on('end', () => resolve(Buffer.concat(chunks)))
         stream.on('error', reject)
-    });
-};
+    })
+}
 
 const storage = new Storage({
     projectId: process.env.PROJECTID,
@@ -40,12 +40,12 @@ const isTokenBlacklisted = async (token) => {
 }
 
 const SaveImagetoGCS = async(imageBuffer, filename) => {
-    const file = bucket.file(filename);
+    const file = bucket.file(filename)
     await file.save(imageBuffer, {
         contentType: 'image/jpeg',
         public: true,
     })
-    return `https://storage.googleapis.com/${bucketName}/${filename}`;
+    return `https://storage.googleapis.com/${bucketName}/${filename}`
 } 
 
 const AccessValidation = async (request, h) => {
@@ -99,7 +99,7 @@ const SignUp = async (request, h) => {
             const response = h.response({
                 status: 'fail',
                 message: 'Gagal untuk menambahkan, email sudah digunakan'
-            });
+            })
             response.code(400)
             return response
         }
@@ -120,7 +120,7 @@ const SignUp = async (request, h) => {
                         phonenumber
                     }
                 }
-            });
+            })
             response.code(201)
             return response
         } else {
@@ -131,7 +131,7 @@ const SignUp = async (request, h) => {
         const response = h.response({
             status: 'fail',
             message: 'User gagal ditambahkan'
-        });
+        })
         response.code(500)
         return response
     }
@@ -150,14 +150,14 @@ const SignIn = async (request, h) => {
                 status: 'success',
                 message: 'Berhasil login ke user',
                 token: token
-            });
+            })
             response.code(200)
             return response
         } else {
             const response = h.response({
                 status: 'fail',
                 message: 'Invalid email or password'
-            });
+            })
             response.code(404)
             return response
         }
@@ -166,7 +166,7 @@ const SignIn = async (request, h) => {
         const response = h.response({
             status: 'fail',
             message: 'Gagal login'
-        });
+        })
         response.code(500)
         return response
     }
@@ -191,26 +191,26 @@ const ForgotPasswordSendEmail = async(request, h) => {
                 tls: {
                     rejectUnauthorized: false
                 }
-            });
+            })
 
             await transporter.sendMail({
                 from: 'U-Meal Application',
                 to: email,
                 subject: 'Kode OTP Verification',
                 text: `This is your OTP code: ${codeotp}`
-            });
+            })
 
             const response = h.response({
                 status: 'success',
                 message: 'Periksa email Anda untuk mereset kata sandi'
-            });
+            })
             response.code(200)
             return response
         } else {
             const response = h.response({
                 status: 'fail',
                 message: 'Email tidak ditemukan'
-            });
+            })
             response.code(404)
             return response
         }
@@ -219,7 +219,7 @@ const ForgotPasswordSendEmail = async(request, h) => {
         const response = h.response({
             status: 'fail',
             message: 'Gagal mengirim email untuk reset kata sandi'
-        });
+        })
         response.code(500)
         return response
     }
@@ -239,14 +239,14 @@ const ForgotPasswordChangePassword = async (request, h) => {
             const response = h.response({
                 status: 'success',
                 message: 'Kata sandi berhasil direset'
-            });
+            })
             response.code(200);
             return response
         } else {
             const response = h.response({
                 status: 'fail',
                 message: 'OTP tidak valid'
-            });
+            })
             response.code(400)
             return response
         }
@@ -255,7 +255,7 @@ const ForgotPasswordChangePassword = async (request, h) => {
         const response = h.response({
             status: 'fail',
             message: 'Gagal mereset kata sandi'
-        });
+        })
         response.code(500)
         return response
     }
@@ -268,7 +268,7 @@ const Logout = async (request, h) => {
         const response = h.response({
             status: 'fail',
             message: 'Unauthorized'
-        });
+        })
         response.code(401)
         return response
     }
@@ -280,7 +280,7 @@ const Logout = async (request, h) => {
         const response = h.response({
             status: 'fail',
             message: 'Unauthorized'
-        });
+        })
         response.code(401)
         return response
     }
@@ -292,14 +292,14 @@ const Logout = async (request, h) => {
         const response = h.response({
             status: 'success',
             message: 'Logout berhasil'
-        });
+        })
         response.code(200)
         return response
     } catch (error) {
         const response = h.response({
             status: 'fail',
             message: 'Unauthorized'
-        });
+        })
         response.code(401)
         return response
     }
@@ -307,64 +307,64 @@ const Logout = async (request, h) => {
 
 const generateUniqueScanId = async () => {
     let uniqueIdFound = false;
-    let newId;
+    let newId
     while (!uniqueIdFound) {
         // Generate random 4 digit number within the range 1000-9999
-        newId = Math.floor(1000 + Math.random() * 9000);
+        newId = Math.floor(1000 + Math.random() * 9000)
         // Check if the ID already exists in the database
-        const [rows] = await dbase.query('SELECT id FROM scans WHERE id = ?', [newId]);
+        const [rows] = await dbase.query('SELECT id FROM scans WHERE id = ?', [newId])
         if (rows.length === 0) {
-            uniqueIdFound = true;
+            uniqueIdFound = true
         }
     }
-    return newId;
-};
+    return newId
+}
 
 const ScanImage = async (request, h) => {
     try {
         const { image, scanId } = request.payload
 
         if (scanId) {
-            const [scan] = await dbase.query('SELECT id, user_id, total_kalori, scan_timestamp, image_url FROM scans WHERE id = ?', [scanId]);
-            const [scanDetails] = await dbase.query('SELECT jenis, kalori FROM scan_details WHERE scans_id = ?', [scanId]);
+            const [scan] = await dbase.query('SELECT id, user_id, total_kalori, scan_timestamp, image_url FROM scans WHERE id = ?', [scanId])
+            const [scanDetails] = await dbase.query('SELECT jenis, kalori FROM scan_details WHERE scans_id = ?', [scanId])
 
             if (scan.length === 0) {
                 const response = h.response({
                     status: 'fail',
                     message: 'Scan not found',
-                });
-                response.code(404);
-                return response;
+                })
+                response.code(404)
+                return response
             }
 
             const scanData = scan[0];
             const data = {
                 ...scanData,
                 detectedFoods: scanDetails
-            };
+            }
 
             const response = h.response({
                 status: 'success',
                 message: 'Scan details fetched successfully',
                 data,
-            });
-            response.code(200);
-            return response;
+            })
+            response.code(200)
+            return response
         }
 
-        const imageBuffer = await streamToBuffer(image);
+        const imageBuffer = await streamToBuffer(image)
 
         // Prepare form data
         const form = new FormData();
         form.append('image', imageBuffer, {
             filename: 'upload.jpg',
             contentType: 'image/jpeg',
-        });
+        })
 
         // Send POST request to Flask API
         const flaskApiResponse = await axios.post('http://127.0.0.1:8080/scan', form, {
             headers: form.getHeaders(),
-        });
+        })
 
         // Process response from Flask API
         const detectedLabels = flaskApiResponse.data
@@ -375,7 +375,7 @@ const ScanImage = async (request, h) => {
         const gcsFilename = `${id_pict}.jpg`
         const imageUrl = await SaveImagetoGCS(imageBuffer, gcsFilename)
 
-        let totalCalories = 0;
+        let totalCalories = 0
         const foodEntries = []
         for (const foodName of detectedLabels) {
             const [foods] = await dbase.query('SELECT jenis, kalori FROM foods WHERE jenis = ?', [foodName])
@@ -390,7 +390,7 @@ const ScanImage = async (request, h) => {
 
         await dbase.query('INSERT INTO scans (id, user_id, total_kalori, scan_timestamp, image_url) VALUES (?, ?, ?, ?, ?)', [newScanId, userId, totalCalories, scanTimestamp, imageUrl])
 
-        const scanDetailsValues = foodEntries.map(entry => [newScanId, userId, entry.jenis, entry.kalori]);
+        const scanDetailsValues = foodEntries.map(entry => [newScanId, userId, entry.jenis, entry.kalori])
         for (const values of scanDetailsValues) {
             await dbase.query('INSERT INTO scan_details (scans_id, user_id, jenis, kalori) VALUES (?, ?, ?, ?)', values)
         }
