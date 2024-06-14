@@ -322,7 +322,36 @@ const generateUniqueScanId = async () => {
 
 const ScanImage = async (request, h) => {
     try {
-        const { image } = request.payload;
+        const { image, scanId } = request.payload
+
+        if (scanId) {
+            const [scan] = await dbase.query('SELECT id, user_id, total_kalori, scan_timestamp, image_url FROM scans WHERE id = ?', [scanId]);
+            const [scanDetails] = await dbase.query('SELECT jenis, kalori FROM scan_details WHERE scans_id = ?', [scanId]);
+
+            if (scan.length === 0) {
+                const response = h.response({
+                    status: 'fail',
+                    message: 'Scan not found',
+                });
+                response.code(404);
+                return response;
+            }
+
+            const scanData = scan[0];
+            const data = {
+                ...scanData,
+                detectedFoods: scanDetails
+            };
+
+            const response = h.response({
+                status: 'success',
+                message: 'Scan details fetched successfully',
+                data,
+            });
+            response.code(200);
+            return response;
+        }
+
         const imageBuffer = await streamToBuffer(image);
 
         // Prepare form data
@@ -338,62 +367,62 @@ const ScanImage = async (request, h) => {
         });
 
         // Process response from Flask API
-        const detectedLabels = flaskApiResponse.data; // assume this is an array of food names
-        const userId = request.auth.credentials.id;
-        const scanTimestamp = new Date();
+        const detectedLabels = flaskApiResponse.data
+        const userId = request.auth.credentials.id
+        const scanTimestamp = new Date()
         const id_pict = nanoid(4)
 
         const gcsFilename = `${id_pict}.jpg`
-        const imageUrl = await SaveImagetoGCS(imageBuffer, gcsFilename);
+        const imageUrl = await SaveImagetoGCS(imageBuffer, gcsFilename)
 
         let totalCalories = 0;
-        const foodEntries = [];
+        const foodEntries = []
         for (const foodName of detectedLabels) {
-            const [foods] = await dbase.query('SELECT jenis, kalori FROM foods WHERE jenis = ?', [foodName]);
+            const [foods] = await dbase.query('SELECT jenis, kalori FROM foods WHERE jenis = ?', [foodName])
             if (foods.length > 0) {
-                const food = foods[0];
-                totalCalories += food.kalori;
-                foodEntries.push({ jenis: food.jenis, kalori: food.kalori });
+                const food = foods[0]
+                totalCalories += food.kalori
+                foodEntries.push({ jenis: food.jenis, kalori: food.kalori })
             }
         }
 
-        const scanId = await generateUniqueScanId();
+        const newScanId = await generateUniqueScanId();
 
-        await dbase.query('INSERT INTO scans (id, user_id, total_kalori, scan_timestamp) VALUES (?, ?, ?, ?)', [scanId, userId, totalCalories, scanTimestamp]);
+        await dbase.query('INSERT INTO scans (id, user_id, total_kalori, scan_timestamp, image_url) VALUES (?, ?, ?, ?, ?)', [newScanId, userId, totalCalories, scanTimestamp, imageUrl])
 
-        const scanDetailsValues = foodEntries.map(entry => [scanId, userId, entry.jenis, entry.kalori]);
+        const scanDetailsValues = foodEntries.map(entry => [newScanId, userId, entry.jenis, entry.kalori]);
         for (const values of scanDetailsValues) {
-            await dbase.query('INSERT INTO scan_details (scans_id, user_id, jenis, kalori) VALUES (?, ?, ?, ?)', values);
+            await dbase.query('INSERT INTO scan_details (scans_id, user_id, jenis, kalori) VALUES (?, ?, ?, ?)', values)
         }
 
-        const [daftarScan] = await dbase.query('SELECT jenis, kalori FROM scan_details WHERE scans_id = ?', [scanId]);
+        const [daftarScan] = await dbase.query('SELECT jenis, kalori FROM scan_details WHERE scans_id = ?', [newScanId])
 
         const data = {
             imageUrl: imageUrl,
-            scanId,
+            scanId: newScanId,
             totalCalories,
             detectedFoods: daftarScan,
             scanTimestamp
-        };
+        }
 
         const response = h.response({
             status: 'success',
-            message: 'Scan berhasil disimpan',
+            message: 'Model is predicted successfully',
             data,
-        });
-        response.code(201);
-        return response;
+        })
+        response.code(201)
+        return response
 
     } catch (error) {
-        console.error('Error during scan:', error);
+        console.error('Error during scan:', error)
         const response = h.response({
             status: 'fail',
             message: 'Gagal melakukan scan',
-        });
-        response.code(500);
-        return response;
+        })
+        response.code(500)
+        return response
     }
-};
+}
 
 
 module.exports = { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, ScanImage }
