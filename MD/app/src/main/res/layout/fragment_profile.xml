@@ -54,7 +54,7 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tvUserPhoneNumber"
+                android:id="@+id/tvUserEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/profile_email"
@@ -154,7 +154,7 @@
         android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/buttonChangePassword"
+        android:id="@+id/buttonChangeHPHT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -169,8 +169,8 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:contentDescription="@string/change_password"
-            android:src="@drawable/ic_key_32" />
+            android:contentDescription="@string/set_hpht_date"
+            android:src="@drawable/ic_embrio_32" />
 
         <TextView
             android:layout_width="0dp"
@@ -178,13 +178,13 @@
             android:layout_gravity="center"
             android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:text="@string/change_password" />
+            android:text="@string/set_hpht_date" />
 
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
-            android:contentDescription="@string/change_password"
+            android:contentDescription="@string/set_hpht_date"
             android:src="@drawable/ic_right_arrow_16" />
     </LinearLayout>
 

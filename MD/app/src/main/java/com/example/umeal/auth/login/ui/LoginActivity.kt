@@ -78,12 +78,13 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
+            val name = binding.edtName.text.toString().trim()
             val email = edtEmail.text.toString().trim()
             val password = binding.edtPassword.text.toString().trim()
-            if (email.isEmpty() || password.isEmpty()) {
+            if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 showToast(getString(R.string.warning_input))
             } else {
-                loginUser(email, password)
+                loginUser(name, email, password)
             }
         }
     }
@@ -108,14 +109,19 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun loginUser(email: String, password: String) {
+    private fun loginUser(name: String, email: String, password: String) {
         setLoadingState(true)
         lifecycleScope.launch {
             if (loginJob.isActive) loginJob.cancel()
             loginJob = launch {
                 viewModel.login(email, password).collect { result ->
                     when (result) {
-                        is ResultState.Success -> handleLoginSuccess(result.data?.token)
+                        is ResultState.Success -> handleLoginSuccess(
+                            result.data?.token,
+                            name,
+                            email
+                        )
+
                         is ResultState.Loading -> setLoadingState(true)
                         is ResultState.Error -> handleLoginError(result.message)
                     }
@@ -129,8 +135,10 @@ class LoginActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
-    private fun handleLoginSuccess(token: String?) {
+    private fun handleLoginSuccess(token: String?, name: String, email: String) {
         setLoadingState(false)
+        preferenceManager.name = name
+        preferenceManager.email = email
         token?.let {
             preferenceManager.exampleBoolean = true
             preferenceManager.token = it

@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.umeal.R
 import com.example.umeal.data.ResultState
 import com.example.umeal.databinding.FragmentHomeBinding
 import com.example.umeal.home.ViewModelFactory
+import com.example.umeal.utils.PreferenceManager
 
 class HomeFragment : Fragment() {
 
@@ -25,10 +24,11 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var preferenceManager: PreferenceManager
+
     private var dailyProgress: Double = 0.0
     private var userDailyCalories: Int = 0
     private var userFulfilledCalories: Int = 2500
-    private var userTrimester: Int = 1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,14 +39,21 @@ class HomeFragment : Fragment() {
         val viewModel: HomeViewModel by viewModels {
             factory
         }
+        preferenceManager = PreferenceManager(requireActivity())
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         setUserName()
-        setUserTrimester()
+
+        val trimester = viewModel.countTrimester(
+            preferenceManager.hphtDays,
+            preferenceManager.hphtMonth,
+            preferenceManager.hphtYear
+        )
         val articlesAdapter = ArticlesAdapter()
 
-        viewModel.getUserDailyCalories(userTrimester)
+        viewModel.getUserDailyCalories(trimester)
         viewModel.dailyCalorieResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is ResultState.Loading -> {
@@ -61,7 +68,7 @@ class HomeFragment : Fragment() {
                         binding.progressBar.progress = dailyProgress.toInt()
                         binding.progressBar.max = 100
                         binding.tvTrimester.text =
-                            String.format(getString(R.string.trimester), userTrimester.toString())
+                            String.format(getString(R.string.trimester), trimester.toString())
                         binding.tvFulfilledCalories.text = String.format(
                             getString(R.string.calories_count),
                             userFulfilledCalories.toString(),
@@ -118,13 +125,10 @@ class HomeFragment : Fragment() {
 
 
     private fun setUserName() {
-        val name = "Bella"
+        val name = preferenceManager.name
         binding.tvMomsUsername.text = String.format(resources.getString(R.string.moms_name), name)
     }
 
-    private fun setUserTrimester() {
-        userTrimester = 1
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
