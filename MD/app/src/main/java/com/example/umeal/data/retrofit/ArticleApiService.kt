@@ -8,7 +8,7 @@ interface ArticleApiService {
     @GET("news")
     suspend fun getNews(
         @Query("apikey") apikey: String,
-        @Query("q") q: String = "makanan sehat",
-        @Query("category") category: String = "food,health"
+        @Query("q") q: String = "makanan sehat nutrisi",
+        @Query("country") country: String = "id"
     ): ArticleResponse
 }

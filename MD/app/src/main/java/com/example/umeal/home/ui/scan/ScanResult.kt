@@ -44,7 +44,6 @@ class ScanResult : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityScanResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -86,12 +85,14 @@ class ScanResult : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.lottieLoading.visibility = View.VISIBLE
+            binding.backgroundOverlay.visibility = View.VISIBLE
             binding.cvImageScan.visibility = View.GONE
             binding.tvMealTime.visibility = View.GONE
             binding.cvMealTime.visibility = View.GONE
             binding.tvDetectedFood.visibility = View.GONE
             binding.rvDetectedFood.visibility = View.GONE
         } else {
+            binding.backgroundOverlay.visibility = View.GONE
             binding.lottieLoading.visibility = View.GONE
             binding.cvImageScan.visibility = View.VISIBLE
             binding.tvMealTime.visibility = View.VISIBLE

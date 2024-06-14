@@ -117,4 +117,5 @@
     <string name="name">Nama</string>
     <string name="enter_your_name">Masukkan nama anda</string>
     <string name="scan_result">Hasil Scan</string>
+    <string name="save_data">Simpan Data</string>
 </resources>
