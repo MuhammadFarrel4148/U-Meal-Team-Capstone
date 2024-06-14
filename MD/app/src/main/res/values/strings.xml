@@ -104,7 +104,7 @@
     <string name="jam_makan">Jam Makan</string>
     <string name="makan_siang">Makan Siang</string>
     <string name="makanan_terdeteksi">Makanan Terdeteksi</string>
-    <string name="warning_input">Isi Form Dengan Benar</string>
+    <string name="warning_input">Isi semua input dengan benar</string>
     <string name="check">Periksa Kembali Email dan Password</string>
     <string name="enter_phone_number">Masukkan No. Handphone</string>
     <string name="success_register">Berhasil Daftar Akun</string>
@@ -112,4 +112,8 @@
     <string name="success_add_story">Sukses Mengupload Gambar</string>
     <string name="error_add_story">Gagal Mengupload Gambar</string>
     <string name="hasil_scan">Hasil Scan\n</string>
+    <string name="set_hpht_date">Ubah tanggal HPHT</string>
+    <string name="not_yet_implemented">Belum di tentukan</string>
+    <string name="name">Nama</string>
+    <string name="enter_your_name">Masukkan nama anda</string>
 </resources>

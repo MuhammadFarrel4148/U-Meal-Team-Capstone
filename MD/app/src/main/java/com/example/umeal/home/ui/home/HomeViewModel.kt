@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.umeal.data.ResultState
 import com.example.umeal.data.repository.ArticleRepository
+import com.example.umeal.utils.daysUntil
 
 class HomeViewModel(private val repository: ArticleRepository) : ViewModel() {
 
@@ -30,6 +31,16 @@ class HomeViewModel(private val repository: ArticleRepository) : ViewModel() {
             }
         }
         _dailyCalorieResult.postValue(ResultState.Success(newCalories))
+        _calories.postValue(newCalories)
+    }
+
+    fun countTrimester(day: Int, month: Int, year: Int): Int {
+        val days = daysUntil(year, month, day)
+        return when {
+            days >= 189 -> 3
+            days in 98..188 -> 2
+            else -> 1
+        }
     }
 
     fun getArticles() = repository.getArticles()
