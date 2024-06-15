@@ -84,38 +84,38 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewModel.getArticles().observe(viewLifecycleOwner) { result ->
-            if (result != null) {
-                when (result) {
-                    is ResultState.Loading -> {
-                        binding.loadingFrame.visibility = View.VISIBLE
-                    }
-
-                    is ResultState.Success -> {
-                        if (result.data?.isEmpty() == true) {
-                            binding.loadingFrame.visibility = View.VISIBLE
-                            binding.loadingBar.visibility = View.GONE
-                            binding.tvNoArticle.visibility = View.VISIBLE
-                        } else {
-                            binding.loadingFrame.visibility = View.GONE
-                            val articleData = result.data
-                            if (articleData != null) {
-                                articlesAdapter.submitList(articleData)
-                            }
-                        }
-                    }
-
-                    is ResultState.Error -> {
-                        binding.loadingFrame.visibility = View.GONE
-                        Toast.makeText(
-                            requireContext(),
-                            "Error fetching articles",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        }
+//        viewModel.getArticles().observe(viewLifecycleOwner) { result ->
+//            if (result != null) {
+//                when (result) {
+//                    is ResultState.Loading -> {
+//                        binding.loadingFrame.visibility = View.VISIBLE
+//                    }
+//
+//                    is ResultState.Success -> {
+//                        if (result.data?.isEmpty() == true) {
+//                            binding.loadingFrame.visibility = View.VISIBLE
+//                            binding.loadingBar.visibility = View.GONE
+//                            binding.tvNoArticle.visibility = View.VISIBLE
+//                        } else {
+//                            binding.loadingFrame.visibility = View.GONE
+//                            val articleData = result.data
+//                            if (articleData != null) {
+//                                articlesAdapter.submitList(articleData)
+//                            }
+//                        }
+//                    }
+//
+//                    is ResultState.Error -> {
+//                        binding.loadingFrame.visibility = View.GONE
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "Error fetching articles",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//            }
+//        }
 
         binding.rvArticle.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
