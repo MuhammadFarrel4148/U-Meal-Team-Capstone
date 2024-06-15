@@ -7,6 +7,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -49,21 +50,29 @@ class HomeActivity : AppCompatActivity() {
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val cameraPermissionGranted = permissions[Manifest.permission.CAMERA] ?: false
-        val readExternalStoragePermissionGranted = if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
-            permissions[Manifest.permission.READ_EXTERNAL_STORAGE] ?: false
-        } else {
-            true
-        }
+        val readExternalStoragePermissionGranted =
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+                permissions[Manifest.permission.READ_EXTERNAL_STORAGE] ?: false
+            } else {
+                true
+            }
 
         if (cameraPermissionGranted && readExternalStoragePermissionGranted) {
             showImageSourceDialog()
         } else {
-            Toast.makeText(this, "Camera and storage permissions are required to use this feature", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Camera and storage permissions are required to use this feature",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -78,11 +87,23 @@ class HomeActivity : AppCompatActivity() {
         setupNavigation()
 
         binding.buttonScan.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 showImageSourceDialog()
             } else {
-                requestCameraAndStoragePermissionsLauncher.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE))
+                requestCameraAndStoragePermissionsLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                )
             }
         }
     }
@@ -99,6 +120,7 @@ class HomeActivity : AppCompatActivity() {
             }
             .show()
     }
+
     private fun initializeViewModel() {
         val apiService = ApiConfig.getApiService()
         val dataRepository = DataRepository(apiService)
@@ -110,7 +132,10 @@ class HomeActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_home)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_history, R.id.navigation_profile
+                R.id.navigation_home,
+                R.id.navigation_dashboard,
+                R.id.navigation_history,
+                R.id.navigation_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -163,7 +188,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun startCrop(uri: Uri) {
-        val destinationUri = Uri.fromFile(File(cacheDir, "cropped_${System.currentTimeMillis()}.jpg"))
+        val destinationUri =
+            Uri.fromFile(File(cacheDir, "cropped_${System.currentTimeMillis()}.jpg"))
         val options = UCrop.Options().apply {
             setFreeStyleCropEnabled(true)
         }
