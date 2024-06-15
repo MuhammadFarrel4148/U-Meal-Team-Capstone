@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.umeal.R
 import com.example.umeal.data.ResultState
+import com.example.umeal.data.response.ResultsItem
 import com.example.umeal.databinding.FragmentHomeBinding
 import com.example.umeal.home.ViewModelFactory
 import com.example.umeal.utils.PreferenceManager
@@ -28,7 +29,7 @@ class HomeFragment : Fragment() {
 
     private var dailyProgress: Double = 0.0
     private var userDailyCalories: Int = 0
-    private var userFulfilledCalories: Int = 2500
+    private var userFulfilledCalories: Int = 1870
 
     override fun onCreateView(
         inflater: LayoutInflater,

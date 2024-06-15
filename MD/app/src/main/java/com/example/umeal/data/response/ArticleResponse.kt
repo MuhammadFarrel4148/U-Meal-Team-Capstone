@@ -19,6 +19,7 @@ data class ArticleResponse(
     val status: String? = null
 )
 
+@Parcelize
 data class ResultsItem(
 
 //    @field:SerializedName("country")
@@ -86,4 +87,4 @@ data class ResultsItem(
 //
 //    @field:SerializedName("category")
 //    val category: List<String?>? = null
-)
+) : Parcelable
