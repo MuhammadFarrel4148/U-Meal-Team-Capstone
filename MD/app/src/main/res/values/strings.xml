@@ -118,4 +118,35 @@
     <string name="enter_your_name">Masukkan nama anda</string>
     <string name="scan_result">Hasil Scan</string>
     <string name="save_data">Simpan Data</string>
+    <string name="calculator">Kalculator</string>
+    <string name="body_height_hint">0 cm</string>
+    <string name="body_height">Tinggi Badan</string>
+    <string name="body_weight">Berat Badan</string>
+    <string name="body_weight_hint">0 kg</string>
+    <string name="age">Usia</string>
+    <string name="trimester_label">Trimester</string>
+    <string name="age_hint">0 thn</string>
+    <string name="choose_trimester">Pilih</string>
+    <string name="daily_needed_calorie">Kebutuhan kalori harian</string>
+    <string name="calorie_number">0</string>
+    <string name="cal">" kkal"</string>
+    <string name="activity_factor">Faktor aktivitas</string>
+    <string name="stress_factor">Faktor stress</string>
+    <string name="count">Hitung kalori</string>
+
+    <string-array name="factor_stress_array">
+        <item>Tidak ada stress - 1.1</item>
+        <item>Stress ringan - 1.3</item>
+        <item>Stress sedang - 1.4</item>
+        <item>Stress berat - 1.5</item>
+        <item>Stress sangat berat - 1.7</item>
+    </string-array>
+
+    <string-array name="factor_activity_array">
+        <item>Istirahat bed rest - 1.1</item>
+        <item>Bed rest, bergerak terbatas - 1.2</item>
+        <item>Turun dari tempat tidur - 1.3</item>
+        <item>Aktivitas sedang - 1.5</item>
+        <item>Aktivitas berat - 1.75</item>
+    </string-array>
 </resources>
