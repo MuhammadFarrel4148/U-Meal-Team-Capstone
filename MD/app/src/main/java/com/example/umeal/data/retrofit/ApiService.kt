@@ -1,5 +1,6 @@
 package com.example.umeal.data.retrofit
 
+import com.example.umeal.data.response.ForgotPasswordResponse
 import com.example.umeal.data.response.ResponseLogin
 import com.example.umeal.data.response.ResponseRegister
 import com.example.umeal.home.ui.scan.ResponseScanImage
@@ -28,6 +29,12 @@ interface ApiService {
         @Field("phonenumber") phoneNumber: String,
         @Field("password") password: String
     ): Response<ResponseRegister>
+
+    @POST("forgotpassword")
+    @FormUrlEncoded
+    suspend fun forgotPassword(
+        @Field("email") email: String
+    ): Response<ForgotPasswordResponse>
 
     @POST("logout")
     suspend fun logout(

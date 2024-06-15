@@ -28,6 +28,15 @@
         android:theme="@style/Theme.UMeal"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".auth.forgot_password.NewPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".auth.forgot_password.OtpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".auth.forgot_password.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".home.ui.scan.ScanResult"
             android:exported="false"
             tools:ignore="LockedOrientationActivity" />

@@ -17,6 +17,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.umeal.R
+import com.example.umeal.auth.forgot_password.ForgotPasswordActivity
 import com.example.umeal.auth.signup.ui.RegisterActivity
 import com.example.umeal.auth.signup.ui.RegisterViewModel
 import com.example.umeal.auth.signup.ui.RegisterViewModelFactory
@@ -91,6 +92,10 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 loginUser(name, email, password)
             }
+        }
+
+        binding.btnForgotPassword.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
     }
 
