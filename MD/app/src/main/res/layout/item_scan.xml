@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@android:color/transparent"
-    app:cardElevation="0dp"
     android:background="@drawable/border_background"
-    xmlns:tools="http://schemas.android.com/tools">
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,8 +16,8 @@
             android:id="@+id/textViewFood"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="14dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="14dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Nasi" />
@@ -26,8 +26,8 @@
             android:id="@+id/linearLayoutCaloriesAndIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -35,28 +35,28 @@
                 android:id="@+id/textViewCalories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
                 android:layout_marginStart="14dp"
-                android:layout_marginEnd="30dp"
                 android:layout_marginTop="14dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginBottom="14dp"
-                tools:text="250 kalori"
-                android:textColor="@color/gray50"/>
+                android:textColor="@color/gray50"
+                android:textSize="16sp"
+                tools:text="@string/calorie_count" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewArrowIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="50dp"
                 android:layout_marginTop="14dp"
-                android:layout_marginBottom="14dp">
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="50dp">
 
                 <ImageView
                     android:id="@+id/imageViewArrowIcon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="10dp"
-                    android:contentDescription="Arrow"
+                    android:contentDescription="@string/arrow"
                     android:src="@drawable/ic_right_arrow_16"
                     app:tint="@color/black" />
             </androidx.cardview.widget.CardView>

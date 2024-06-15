@@ -133,6 +133,14 @@
     <string name="activity_factor">Faktor aktivitas</string>
     <string name="stress_factor">Faktor stress</string>
     <string name="count">Hitung kalori</string>
+    <string name="today">Today</string>
+    <string name="choose_date">Pilih tanggal</string>
+    <string name="date">%s %s %s</string>
+    <string name="saved_nutrition">Nutrisi makanan tersimpan</string>
+    <string name="food_image">food image</string>
+    <string name="meal_time">Sarapan</string>
+    <string name="calorie_count">200 Kalori</string>
+    <string name="arrow">Arrow</string>
 
     <string-array name="factor_stress_array">
         <item>Tidak ada stress - 1.1</item>
