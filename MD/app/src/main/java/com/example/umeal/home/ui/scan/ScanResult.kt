@@ -1,8 +1,10 @@
 package com.example.umeal.home.ui.scan
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -42,8 +44,10 @@ class ScanResult : AppCompatActivity() {
     private var uploadJob: Job = Job()
     private lateinit var binding: ActivityScanResultBinding
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         binding = ActivityScanResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -136,9 +140,11 @@ class ScanResult : AppCompatActivity() {
                     displayScanResults(scanData.result)
                 }
             }
+
             is ResultState.Loading -> {
                 showLoading(true)
             }
+
             is ResultState.Error -> {
                 Toast.makeText(this, R.string.error_add_story, Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, HomeActivity::class.java)
