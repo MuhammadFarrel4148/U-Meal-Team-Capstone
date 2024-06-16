@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const crypto = require('crypto')
 const axios = require('axios')
+const moment = require('moment-timezone')
 const FormData = require('form-data')
 const { Storage } = require('@google-cloud/storage')
 const JWT_SECRET = process.env.JWT_SECRET
@@ -424,5 +425,62 @@ const ScanImage = async (request, h) => {
     }
 }
 
+const GetHistory = async (request, h) => {
+    try {
+        const userId = request.params.id;
+        const { tanggal, bulan, tahun } = request.query
 
-module.exports = { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, ScanImage }
+        let query = 'SELECT id, total_kalori, scan_timestamp, image_url FROM scans WHERE user_id = ?'
+        const queryParams = [userId]
+
+        if (tanggal) {
+            query += ' AND DAY(scan_timestamp) = ?'
+            queryParams.push(tanggal)
+        }
+
+        if (bulan) {
+            query += ' AND MONTH(scan_timestamp) = ?'
+            queryParams.push(bulan)
+        }
+
+        if (tahun) {
+            query += ' AND YEAR(scan_timestamp) = ?'
+            queryParams.push(tahun)
+        }
+
+        const [scans] = await dbase.query(query, queryParams)
+
+        if (scans.length === 0) {
+            return h.response({
+                status: 'fail',
+                message: 'No scans found for the user'
+            }).code(404);
+        }
+
+        const detailedScans = await Promise.all(scans.map(async (scan) => {
+            const [scanDetails] = await dbase.query('SELECT jenis, kalori FROM scan_details WHERE scans_id = ?', [scan.id])
+
+            const localTimestamp = moment(scan.scan_timestamp).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss')
+
+            return {
+                ...scan,
+                scan_timestamp: localTimestamp,
+                detectedFoods: scanDetails
+            }
+        }))
+
+        return h.response({
+            status: 'success',
+            message: 'History berhasil diambil',
+            data: detailedScans,
+        }).code(200)
+    } catch (error) {
+        return h.response({
+            status: 'fail',
+            message: 'gagal mengambil history',
+        }).code(500)
+    }
+}
+
+
+module.exports = { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, ScanImage, GetHistory }
