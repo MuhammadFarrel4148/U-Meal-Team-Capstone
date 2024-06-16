@@ -427,7 +427,7 @@ const ScanImage = async (request, h) => {
 
 const GetHistory = async (request, h) => {
     try {
-        const userId = request.params.id;
+        const userId = request.params.id
         const { tanggal, bulan, tahun } = request.query
 
         let query = 'SELECT id, total_kalori, scan_timestamp, image_url FROM scans WHERE user_id = ?'
@@ -451,10 +451,12 @@ const GetHistory = async (request, h) => {
         const [scans] = await dbase.query(query, queryParams)
 
         if (scans.length === 0) {
-            return h.response({
+            const response = h.response({
                 status: 'fail',
                 message: 'No scans found for the user'
-            }).code(404);
+            })
+            response.code(404)
+            return response
         }
 
         const detailedScans = await Promise.all(scans.map(async (scan) => {
@@ -469,16 +471,21 @@ const GetHistory = async (request, h) => {
             }
         }))
 
-        return h.response({
+        const response = h.response({
             status: 'success',
             message: 'History berhasil diambil',
             data: detailedScans,
-        }).code(200)
+        })
+        response.code(200)
+        return response
+
     } catch (error) {
-        return h.response({
+        const response = h.response({
             status: 'fail',
             message: 'gagal mengambil history',
-        }).code(500)
+        })
+        response.code(500)
+        return response
     }
 }
 
