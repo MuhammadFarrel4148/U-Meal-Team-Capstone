@@ -50,6 +50,61 @@
             android:textAlignment="center" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/tvWelcomeHeadline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/enter_new_password"
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otpInputLayout" />
+
+    <TextView
+        android:id="@+id/tvWelcome2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/password_must_be_different"
+        android:textColor="@color/gray50"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/tvWelcomeHeadline2"
+        app:layout_constraintTop_toBottomOf="@+id/tvWelcomeHeadline2" />
+
+    <TextView
+        android:id="@+id/tvPasswordLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/password"
+        android:textColor="?attr/textAppearanceBody1"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvWelcome2"
+        app:layout_constraintTop_toBottomOf="@+id/tvWelcome2" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:helperTextTextColor="@color/red"
+        app:hintEnabled="false"
+        app:hintTextAppearance="@color/gray30"
+        app:layout_constraintStart_toStartOf="@+id/tvPasswordLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvPasswordLabel"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/gray30">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_input_bg"
+            android:hint="@string/enter_password"
+            android:inputType="textPassword"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/btn_confirm"
         android:layout_width="match_parent"
@@ -59,6 +114,16 @@
         android:text="@string/confirm"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/otpInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

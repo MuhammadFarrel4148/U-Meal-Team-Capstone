@@ -36,6 +36,13 @@ interface ApiService {
         @Field("email") email: String
     ): Response<ForgotPasswordResponse>
 
+    @POST("changepassword")
+    @FormUrlEncoded
+    suspend fun changePassword(
+        @Field("codeotp") codeotp: String,
+        @Field("newPassword") newPassword: String
+    ): Response<ForgotPasswordResponse>
+
     @POST("logout")
     suspend fun logout(
         @Header("Authorization") auth: String,

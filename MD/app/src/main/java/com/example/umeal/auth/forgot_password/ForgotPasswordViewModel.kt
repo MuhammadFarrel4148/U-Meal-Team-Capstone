@@ -18,4 +18,16 @@ class ForgotPasswordViewModel(private val dataRepository: DataRepository) : View
             emit(ResultState.Error(e.localizedMessage ?: "Unknown Error"))
         }
     }.flowOn(Dispatchers.IO)
+
+
+    fun changePassword(otpCode: String, newPassword: String) = flow {
+        emit(ResultState.Loading())
+        try {
+            dataRepository.changePassword(otpCode, newPassword).collect { result ->
+                emit(result)
+            }
+        } catch (e: Exception) {
+            emit(ResultState.Error(e.localizedMessage ?: "Unknown Error"))
+        }
+    }.flowOn(Dispatchers.IO)
 }

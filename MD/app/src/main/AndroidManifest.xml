@@ -28,9 +28,6 @@
         android:theme="@style/Theme.UMeal"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".auth.forgot_password.NewPasswordActivity"
-            android:exported="false" />
-        <activity
             android:name=".auth.forgot_password.OtpActivity"
             android:exported="false" />
         <activity

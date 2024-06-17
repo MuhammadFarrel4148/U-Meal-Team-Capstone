@@ -95,6 +95,34 @@ class DataRepository(
         }
     }
 
+    fun changePassword(
+        otpCode: String,
+        newPassword: String
+    ): Flow<ResultState<ForgotPasswordResponse>> = flow {
+        emit(ResultState.Loading())
+        try {
+            val response = apiService.changePassword(codeotp = otpCode, newPassword = newPassword)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(ResultState.Success(it))
+                } ?: run {
+                    emit(ResultState.Error("Empty Response"))
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val errorResponse = Gson().fromJson(errorBody, ForgotPasswordResponse::class.java)
+                emit(ResultState.Error(errorResponse.message))
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, ForgotPasswordResponse::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        } catch (e: Exception) {
+            emit(ResultState.Error(e.localizedMessage ?: "Unknown Error"))
+        }
+    }
+
+
     fun scanImage(auth: String, file: MultipartBody.Part): Flow<ResultState<ResponseScanImage>> =
         flow {
             emit(ResultState.Loading())

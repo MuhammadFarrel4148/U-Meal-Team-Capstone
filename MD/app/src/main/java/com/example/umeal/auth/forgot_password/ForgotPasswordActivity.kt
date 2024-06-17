@@ -72,6 +72,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                                         OtpActivity::class.java
                                     )
                                 )
+                                finish()
                             }
                         }
                     }
