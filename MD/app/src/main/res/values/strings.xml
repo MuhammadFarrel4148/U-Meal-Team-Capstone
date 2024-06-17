@@ -109,8 +109,8 @@
     <string name="enter_phone_number">Masukkan No. Handphone</string>
     <string name="success_register">Berhasil Daftar Akun</string>
     <string name="error_no_image">Gambar Tidak Tersedia</string>
-    <string name="success_add_story">Sukses Mengupload Gambar</string>
-    <string name="error_add_story">Gagal Mengupload Gambar</string>
+    <string name="success_upload">Sukses Mengupload Gambar</string>
+    <string name="error_upload">Gagal Mengupload Gambar</string>
     <string name="hasil_scan">Hasil Scan\n</string>
     <string name="set_hpht_date">Ubah tanggal HPHT</string>
     <string name="not_yet_implemented">Belum di tentukan</string>
@@ -139,7 +139,7 @@
     <string name="saved_nutrition">Nutrisi makanan tersimpan</string>
     <string name="food_image">food image</string>
     <string name="meal_time">Sarapan</string>
-    <string name="calorie_count">200 Kalori</string>
+    <string name="calorie_count">200</string>
     <string name="arrow">Arrow</string>
     <string name="forgot_password">Lupa password?</string>
     <string name="forgot_password_header">Lupa password 🫣</string>
@@ -152,6 +152,7 @@
     <string name="enter_new_password">Masukkan Password baru 👋</string>
     <string name="password_must_be_different">Pastikan password baru berbeda dengan password yang lama</string>
     <string name="confirm_password">Konfirmasi password</string>
+    <string name="no_item_detected">Tidak ada item terdeketeksi</string>
 
     <string-array name="factor_stress_array">
         <item>Tidak ada stress - 1.1</item>
