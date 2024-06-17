@@ -1,4 +1,4 @@
-const { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, ScanImage  } = require('./handler')
+const { AccessValidation, SignUp, SignIn, ForgotPasswordSendEmail, ForgotPasswordChangePassword, Logout, ScanImage, GetHistory  } = require('./handler')
 
 
 const routes = [
@@ -46,6 +46,15 @@ const routes = [
             pre: [{ method: AccessValidation }]
         },
         handler: ScanImage
+    },
+
+    {
+        method: 'GET',
+        path: '/history/{id}',
+        options: {
+            pre: [{ method: AccessValidation }]
+        },
+        handler: GetHistory
     }
 ]
 
