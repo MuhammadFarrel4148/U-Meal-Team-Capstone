@@ -5,8 +5,8 @@ import com.example.umeal.data.ResultState
 import com.example.umeal.data.response.ForgotPasswordResponse
 import com.example.umeal.data.response.ResponseLogin
 import com.example.umeal.data.response.ResponseRegister
+import com.example.umeal.data.response.ScanFoodResponse
 import com.example.umeal.data.retrofit.ApiService
-import com.example.umeal.home.ui.scan.ResponseScanImage
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -123,7 +123,7 @@ class DataRepository(
     }
 
 
-    fun scanImage(auth: String, file: MultipartBody.Part): Flow<ResultState<ResponseScanImage>> =
+    fun scanImage(auth: String, file: MultipartBody.Part): Flow<ResultState<ScanFoodResponse>> =
         flow {
             emit(ResultState.Loading())
             try {
@@ -136,17 +136,17 @@ class DataRepository(
                 } else {
                     val errorBody = response.errorBody()?.string()
                     val errorResponse = errorBody?.let {
-                        Gson().fromJson(it, ResponseScanImage::class.java)
+                        Gson().fromJson(it, ScanFoodResponse::class.java)
                     }
-                    val errorMessage = errorResponse?.status?.toString() ?: "Unknown error occurred"
+                    val errorMessage = errorResponse?.message ?: "Unknown error occurred"
                     emit(ResultState.Error(errorMessage))
                 }
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
                 val errorResponse = errorBody?.let {
-                    Gson().fromJson(it, ResponseScanImage::class.java)
+                    Gson().fromJson(it, ScanFoodResponse::class.java)
                 }
-                val errorMessage = errorResponse?.status?.toString() ?: "HTTP Exception"
+                val errorMessage = errorResponse?.message ?: "HTTP Exception"
                 emit(ResultState.Error(errorMessage))
             } catch (e: Exception) {
                 emit(ResultState.Error(e.localizedMessage ?: "Unknown Error"))

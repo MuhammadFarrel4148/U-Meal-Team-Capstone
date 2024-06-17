@@ -3,7 +3,7 @@ package com.example.umeal.data.retrofit
 import com.example.umeal.data.response.ForgotPasswordResponse
 import com.example.umeal.data.response.ResponseLogin
 import com.example.umeal.data.response.ResponseRegister
-import com.example.umeal.home.ui.scan.ResponseScanImage
+import com.example.umeal.data.response.ScanFoodResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Field
@@ -53,5 +53,5 @@ interface ApiService {
     suspend fun scanImage(
         @Header("Authorization") auth: String,
         @Part file: MultipartBody.Part,
-    ): Response<ResponseScanImage>
+    ): Response<ScanFoodResponse>
 }

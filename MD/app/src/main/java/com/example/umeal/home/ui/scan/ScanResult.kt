@@ -15,7 +15,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
@@ -24,6 +23,8 @@ import com.example.umeal.R
 import com.example.umeal.adapter.ScanResultAdapter
 import com.example.umeal.data.ResultState
 import com.example.umeal.data.repository.DataRepository
+import com.example.umeal.data.response.DetectedFoodsItem
+import com.example.umeal.data.response.ScanFoodResponse
 import com.example.umeal.data.retrofit.ApiConfig
 import com.example.umeal.databinding.ActivityScanResultBinding
 import com.example.umeal.home.HomeActivity
@@ -91,16 +92,12 @@ class ScanResult : AppCompatActivity() {
             binding.lottieLoading.visibility = View.VISIBLE
             binding.backgroundOverlay.visibility = View.VISIBLE
             binding.cvImageScan.visibility = View.GONE
-            binding.tvMealTime.visibility = View.GONE
-            binding.cvMealTime.visibility = View.GONE
             binding.tvDetectedFood.visibility = View.GONE
             binding.rvDetectedFood.visibility = View.GONE
         } else {
             binding.backgroundOverlay.visibility = View.GONE
             binding.lottieLoading.visibility = View.GONE
             binding.cvImageScan.visibility = View.VISIBLE
-            binding.tvMealTime.visibility = View.VISIBLE
-            binding.cvMealTime.visibility = View.VISIBLE
             binding.tvDetectedFood.visibility = View.VISIBLE
             binding.rvDetectedFood.visibility = View.VISIBLE
         }
@@ -124,20 +121,20 @@ class ScanResult : AppCompatActivity() {
         lifecycle.coroutineScope.launchWhenResumed {
             if (uploadJob.isActive) uploadJob.cancel()
             uploadJob = launch {
-                viewModel.scanImage(preferenceManager.token, imageMultipart).collect { result ->
-                    handleUploadResult(result)
+                viewModel.scanImage(preferenceManager.token, imageMultipart).collect {
+                    handleUploadResult(it)
                 }
             }
         }
     }
 
-    private fun handleUploadResult(result: ResultState<ResponseScanImage>) {
+    private fun handleUploadResult(result: ResultState<ScanFoodResponse>) {
         when (result) {
             is ResultState.Success -> {
-                Toast.makeText(this, R.string.success_add_story, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.success_upload, Toast.LENGTH_SHORT).show()
                 val scanData = result.data?.data
                 if (scanData != null) {
-                    displayScanResults(scanData.result)
+                    displayScanResults(scanData.detectedFoods)
                 }
             }
 
@@ -146,7 +143,7 @@ class ScanResult : AppCompatActivity() {
             }
 
             is ResultState.Error -> {
-                Toast.makeText(this, R.string.error_add_story, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_upload, Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -156,9 +153,16 @@ class ScanResult : AppCompatActivity() {
     }
 
 
-    private fun displayScanResults(results: List<String>) {
-        val adapter = ScanResultAdapter(results)
-        binding.rvDetectedFood.adapter = adapter
+    private fun displayScanResults(results: List<DetectedFoodsItem?>) {
+        if (results.isEmpty()) {
+            binding.rvDetectedFood.visibility = View.GONE
+            binding.tvNoFoodDetected.visibility = View.VISIBLE
+            binding.ivNoFoodDetected.visibility = View.VISIBLE
+        } else {
+            val adapter = ScanResultAdapter(results)
+            binding.rvDetectedFood.adapter = adapter
+        }
+
     }
 
     private fun reduceFileImage(file: File): File {
