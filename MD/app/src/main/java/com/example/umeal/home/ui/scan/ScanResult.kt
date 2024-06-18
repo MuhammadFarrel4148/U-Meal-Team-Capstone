@@ -77,6 +77,14 @@ class ScanResult : AppCompatActivity() {
                     }
             }, 3000)
         }
+        binding.btnSave.setOnClickListener {
+            startActivity(Intent(this@ScanResult, HomeActivity::class.java))
+            finish()
+            Toast.makeText(
+                this@ScanResult,
+                getString(R.string.item_successfully_saved), Toast.LENGTH_SHORT
+            ).show()
+        }
 
     }
 

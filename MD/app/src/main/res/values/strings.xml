@@ -154,6 +154,7 @@
     <string name="confirm_password">Konfirmasi password</string>
     <string name="no_item_detected">Tidak ada item terdeketeksi</string>
     <string name="no_history">Tidak ada history</string>
+    <string name="item_successfully_saved">Item berhasil disimpan</string>
 
     <string-array name="factor_stress_array">
         <item>Tidak ada stress - 1.1</item>
