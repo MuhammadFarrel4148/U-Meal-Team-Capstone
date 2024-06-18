@@ -1,14 +1,11 @@
 package com.example.umeal.auth.login.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.umeal.data.ResultState
 import com.example.umeal.data.repository.DataRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
 
 class LoginViewModel(private val dataRepository: DataRepository) : ViewModel() {
 

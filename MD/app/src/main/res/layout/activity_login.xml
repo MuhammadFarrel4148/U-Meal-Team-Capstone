@@ -30,46 +30,15 @@
         app:layout_constraintTop_toBottomOf="@+id/tvWelcomeHeadline" />
 
     <TextView
-        android:id="@+id/tvNameLabel"
+        android:id="@+id/tvEmailLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/name"
+        android:text="@string/email_address"
         android:textColor="?attr/textAppearanceBody1"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tvWelcome"
         app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nameInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        app:helperTextTextColor="@color/red"
-        app:hintEnabled="false"
-        app:hintTextAppearance="@color/gray30"
-        app:layout_constraintStart_toStartOf="@+id/tvNameLabel"
-        app:layout_constraintTop_toBottomOf="@+id/tvNameLabel">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/text_input_bg"
-            android:hint="@string/enter_your_name"
-            android:singleLine="true" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tvEmailLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/email_address"
-        android:textColor="?attr/textAppearanceBody1"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/nameInputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/nameInputLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailInputLayout"

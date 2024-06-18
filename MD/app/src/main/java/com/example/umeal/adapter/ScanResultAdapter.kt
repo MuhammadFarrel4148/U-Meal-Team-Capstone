@@ -24,10 +24,8 @@ class ScanResultAdapter(private val results: List<DetectedFoodsItem?>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = results[position]
         if (item != null) {
-            holder.foodItemTextView.text = item.jenis
-        }
-        if (item != null) {
             holder.calorieTextView.text = item.kalori.toString()
+            holder.foodItemTextView.text = item.jenis
         }
     }
 

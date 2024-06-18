@@ -6,10 +6,8 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,8 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.umeal.R
 import com.example.umeal.auth.forgot_password.ForgotPasswordActivity
 import com.example.umeal.auth.signup.ui.RegisterActivity
-import com.example.umeal.auth.signup.ui.RegisterViewModel
-import com.example.umeal.auth.signup.ui.RegisterViewModelFactory
 import com.example.umeal.data.ResultState
 import com.example.umeal.data.repository.DataRepository
 import com.example.umeal.data.retrofit.ApiConfig
@@ -84,13 +80,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
-            val name = binding.edtName.text.toString().trim()
             val email = edtEmail.text.toString().trim()
             val password = binding.edtPassword.text.toString().trim()
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty()) {
                 showToast(getString(R.string.warning_input))
             } else {
-                loginUser(name, email, password)
+                loginUser(email, password)
             }
         }
 
@@ -119,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun loginUser(name: String, email: String, password: String) {
+    private fun loginUser(email: String, password: String) {
         setLoadingState(true)
         lifecycleScope.launch {
             if (loginJob.isActive) loginJob.cancel()
@@ -128,8 +123,9 @@ class LoginActivity : AppCompatActivity() {
                     when (result) {
                         is ResultState.Success -> handleLoginSuccess(
                             result.data?.token,
-                            name,
-                            email
+                            result.data?.data?.user?.username.toString(),
+                            email,
+                            result.data?.data?.user?.id.toString()
                         )
 
                         is ResultState.Loading -> setLoadingState(true)
@@ -145,10 +141,11 @@ class LoginActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
-    private fun handleLoginSuccess(token: String?, name: String, email: String) {
+    private fun handleLoginSuccess(token: String?, name: String, email: String, userid: String) {
         setLoadingState(false)
         preferenceManager.name = name
         preferenceManager.email = email
+        preferenceManager.userId = userid
         token?.let {
             preferenceManager.exampleBoolean = true
             preferenceManager.token = it

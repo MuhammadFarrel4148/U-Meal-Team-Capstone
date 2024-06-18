@@ -16,11 +16,12 @@ class PreferenceManager(context: Context) {
     private val defaultToken = ""
     private val defaultName = ""
     private val defaultEmail = ""
+    private val defaultUserId = ""
 
     private val calendar = Calendar.getInstance()
-    private val defaultHPHTDays = calendar.get(Calendar.YEAR)
+    private val defaultHPHTDays = calendar.get(Calendar.DAY_OF_MONTH)
     private val defaultHPHTMonth = calendar.get(Calendar.MONTH)
-    private val defaultHPHTYear = calendar.get(Calendar.DAY_OF_MONTH)
+    private val defaultHPHTYear = calendar.get(Calendar.YEAR)
 
     var exampleBoolean: Boolean
         get() = sharedPreferences.getBoolean("exampleBoolean", defaultExampleBoolean)
@@ -39,6 +40,9 @@ class PreferenceManager(context: Context) {
     var email: String
         get() = sharedPreferences.getString("email", defaultEmail).toString()
         set(value) = sharedPreferences.edit().putString("email", value).apply()
+    var userId: String
+        get() = sharedPreferences.getString("user_id", defaultUserId).toString()
+        set(value) = sharedPreferences.edit().putString("user_id", value).apply()
 
     var hphtDays: Int
         get() = sharedPreferences.getInt("hphtdays", defaultHPHTDays)

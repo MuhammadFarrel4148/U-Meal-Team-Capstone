@@ -3,6 +3,7 @@ package com.example.umeal.data.repository
 
 import com.example.umeal.data.ResultState
 import com.example.umeal.data.response.ForgotPasswordResponse
+import com.example.umeal.data.response.ResponseHistory
 import com.example.umeal.data.response.ResponseLogin
 import com.example.umeal.data.response.ResponseRegister
 import com.example.umeal.data.response.ScanFoodResponse
@@ -11,9 +12,9 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import okhttp3.MultipartBody
 import retrofit2.HttpException
+import java.time.Year
 
 class DataRepository(
     private val apiService: ApiService
@@ -154,6 +155,37 @@ class DataRepository(
         }.catch { e ->
             emit(ResultState.Error(e.localizedMessage ?: "Unknown Error"))
         }
+
+    fun getHistory(
+        auth: String,
+        id: String,
+        day: String,
+        month: String,
+        year: String
+    ): Flow<ResultState<ResponseHistory>> = flow {
+        emit(ResultState.Loading())
+        try {
+            val generateToken = generateAuthorization(auth)
+            val response = apiService.getHistory(generateToken, id, day, month, year)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(ResultState.Success(it))
+                } ?: run {
+                    emit(ResultState.Error("Empty Response"))
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val errorResponse = Gson().fromJson(errorBody, ResponseHistory::class.java)
+                emit(ResultState.Error(errorResponse.message))
+            }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, ResponseHistory::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        } catch (e: Exception) {
+            emit(ResultState.Error(e.localizedMessage ?: "Unknown Error"))
+        }
+    }
 
     private fun generateAuthorization(token: String): String {
         return "Bearer $token"
