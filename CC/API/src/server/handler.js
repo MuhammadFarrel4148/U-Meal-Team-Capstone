@@ -113,14 +113,6 @@ const SignUp = async (request, h) => {
             const response = h.response({
                 status: 'success',
                 message: 'User berhasil ditambahkan',
-                data: {
-                    user: {
-                        id,
-                        username,
-                        email,
-                        phonenumber
-                    }
-                }
             })
             response.code(201)
             return response
@@ -150,6 +142,14 @@ const SignIn = async (request, h) => {
             const response = h.response({
                 status: 'success',
                 message: 'Berhasil login ke user',
+                data: {
+                    user: {
+                        id: user.id,
+                        username: user.username,
+                        email: user.email,
+                        phonenumber: user.phonenumber
+                    }
+                },
                 token: token
             })
             response.code(200)
