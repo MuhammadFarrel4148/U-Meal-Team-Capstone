@@ -1,6 +1,7 @@
 package com.example.umeal.home.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,12 +47,15 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         setUserName()
-
+        Log.d(TAG, "preference user id: ${preferenceManager.userId}")
+        Log.d(TAG, "preference user token: ${preferenceManager.token}")
+        Log.d(TAG, "preference user name: ${preferenceManager.name}")
         val trimester = viewModel.countTrimester(
             preferenceManager.hphtDays,
             preferenceManager.hphtMonth,
             preferenceManager.hphtYear
         )
+
         val articlesAdapter = ArticlesAdapter()
 
         viewModel.getUserDailyCalories(trimester)
@@ -134,5 +138,9 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object{
+        const val TAG = "home_fragment"
     }
 }
