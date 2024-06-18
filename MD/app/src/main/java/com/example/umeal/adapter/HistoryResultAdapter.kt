@@ -32,7 +32,22 @@ class HistoryResultAdapter(private val results: List<DataItem>) :
         Glide.with(holder.itemView.context)
             .load(item.imageUrl)
             .into(holder.foodImage)
-        holder.mealTime.text = item.scanTimestamp
+        holder.mealTime.text = getMealTimeLabel(item.scanTimestamp)
         holder.calories.text = item.totalKalori.toString()
     }
+
+    private fun getMealTimeLabel(scanTimestamp: String): String {
+        // Parse the timestamp
+        val dateTime = scanTimestamp.split(" ")
+        val time = dateTime[1].split(":")
+        val hour = time[0].toInt()
+
+        return when (hour) {
+            in 6..10 -> "Sarapan"
+            in 11..14 -> "Makan Siang"
+            in 18..21 -> "Makan Malam"
+            else -> "Waktu Lain"
+        }
+    }
+
 }

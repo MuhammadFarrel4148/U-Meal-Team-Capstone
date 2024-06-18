@@ -63,7 +63,7 @@ interface ApiService {
     suspend fun getHistory(
         @Header("Authorization") auth: String,
         @Path("id") id: String,
-        @Query("taggal") date: String,
+        @Query("tanggal") date: String,
         @Query("bulan") month: String,
         @Query("tahun") year: String,
     ): Response<ResponseHistory>

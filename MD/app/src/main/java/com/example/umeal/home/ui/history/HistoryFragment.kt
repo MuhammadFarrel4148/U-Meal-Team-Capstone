@@ -40,7 +40,7 @@ class HistoryFragment : Fragment() {
         val dataRepository = DataRepository(apiService)
         val factory = HistoryViewModelFactory(dataRepository)
 
-        val viewModel =
+        viewModel =
             ViewModelProvider(this, factory)[HistoryViewModel::class.java]
 
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
@@ -124,6 +124,7 @@ class HistoryFragment : Fragment() {
 
             is ResultState.Success -> {
                 setLoadingState(false)
+                binding.tvNoHistory.visibility = View.GONE
                 binding.rvFoodHistory.visibility = View.VISIBLE
                 val adapter = result.data?.data?.let { HistoryResultAdapter(it) }
                 binding.rvFoodHistory.adapter = adapter
